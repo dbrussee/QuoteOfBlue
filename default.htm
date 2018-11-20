@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quote of Blue</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="script/B/B2_0-Core.js"></script>
+    <script src="script/B/B2_0-Dialog.js"></script>
+    <script src="script/B/B2_0-Data.js"></script>
+    <script src="script/B/B2_0-Table.js"></script>
+    <script src="script/B/B2_0-Menu.js"></script>
+    <script src="script/B/B2_0-DynamicTabs.js"></script>
+    <script src="script/B/B2_0-Growl.js"></script>
+    <script src="script/default.js"></script>
+    <link rel="stylesheet" href="style/default.css">
+
+    <script>
+        var app = {};
+        function init() {
+            app.drop = new B.DropdownMenu();
+            var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
+            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " Quote of Blue", function () { }); // Dont do anything on click
+            m = app.drop.addMenu("group", "Prospects", function () { });
+            m.addMenu("srchProsp", B.img("SEARCH"), "Search for prospect", function () { openDialog("dlgSearchProspect"); });
+            m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); });
+            m = app.drop.addMenu("util", "Utilities", function() { });
+            m.addMenu("profile", B.img("ACCOUNT"), "My Profile", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "User Profile") });
+            m.addMenu("feedback", B.img("FEEDBACK"), "Feedback", function () { openDialog("dlgFeedback") });
+            app.drop.render("dropMenu");
+
+            window.itabs = new B.iTabset("itabs", 650, "99.5%");
+            itabs.onAfterTabSet = function (tab) {
+                document.title = "BQ: " + tab.title;
+            }
+            itabs.onAfterTabRemove = function() {
+                itabs.setTab("recents");
+            }
+            loadFrame("recents", "home.htm", "HOME", "Home", false);
+        }
+
+        function loadFrame(code, url, img, title, removable) {
+            if (removable == undefined) removable = true;
+            var tab = itabs.tabs[code];
+            if (tab == undefined) {
+                if (img == null || img == "") {
+                    tab = itabs.addTab(code, title, url, removable);
+                } else {
+                    tab = itabs.addTabWithImage(code, img, title, url, removable);
+                }
+            }
+            if (tab != undefined) itabs.setTab(tab.id);
+        }
+
+        function gotoProspect(id) {
+            if (id == undefined) {
+                id = B.getForm("dlgSearchProspect").get("pid");
+            }
+            loadFrame("prosp|" + id, "prospect.htm?id=" + id, "COMPANY", "Prosp #" + id);
+        }
+
+        function saveProfile() {
+            sayWarn("Profile saving not coded");
+            return false;
+        }
+        function sendFeedback() {
+            sayWarn("Feedback not coded");
+            return false;
+        }
+    </script>
+
+</head>
+<body>
+<div id='dropMenu' style='margin-bottom:1em'></div>
+<div id='itabs'></div>
+
+<form id='dlgSearchProspect' class='BDialog' title='Search for Prospect' style='height:450px; width:500px;'>
+    <table class='form' style='margin:0 auto'>
+        <tr>
+            <th>Prospect Number:</th>
+            <td><input name='pid' value='12345'></td>
+        </tr>
+    </table>
+    <button class="BDialogButton" onclick='gotoProspect(); popDialog()'>Load Prospect</button>
+    <button class="BDialogButton" onclick='popDialog()'>Cancel</button>
+</form>
+
+
+<form id='dlgFeedback' class='BDialog' title='BlueQuote Feedback' style='height:450px; width:500px;'>
+
+    <button class="BDialogButton" onclick='if (sendFeedback()) popDialog();'>Send Feedback</button>
+    <button class="BDialogButton" onclick='popDialog()'>Cancel</button>
+</form>
+</body>
+</html>

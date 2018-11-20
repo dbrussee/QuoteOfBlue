@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main Menu</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="/script/B/B2_0-Core.js"></script>
+    <script src="/script/B/B2_0-Dialog.js"></script>
+    <script src="/script/B/B2_0-Data.js"></script>
+    <script src="/script/B/B2_0-Table.js"></script>
+    <script src="/script/B/B2_0-Menu.js"></script>
+
+    <script>
+    function init() {
+
+    }
+    function abort() {
+        askWarn("Are you sure you want to abandon any changes you have made to your profile?", "Cancel", function(rslt) {
+            if (rslt == "YES") {
+                top.itabs.closeTab("profile");
+            }
+        })
+    }
+    function saveProfile() {
+        // TODO: Save the profile... duh.
+        top.B.growl.msg("Profile saved", "All changes to your profile have been saved.", 3000);
+        top.itabs.closeTab("profile");
+    }
+    
+    </script>
+
+</head>
+<body>
+    <form id='frmProfile' onsubmit='event.preventDefault()'>
+        <table class='form'>
+            <tr><th>First Name</th><td><input name='fname' size='30'></td></tr>
+
+
+            <tr><td colspan='2'>&nbsp;</td></tr>
+            <tr><td colspan='2' style='text-align:center'>
+                <button onclick='saveProfile()'>Save Profile</button>
+                <button onclick='abort()'>Cancel</button>
+            </td></tr>
+        </table>
+
+
+    </form>
+</body>
+</html>
