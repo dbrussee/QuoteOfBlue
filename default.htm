@@ -25,16 +25,22 @@
         function init() {
             app.drop = new B.DropdownMenu();
             var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
-            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " Quote of Blue", function () { }); // Dont do anything on click
+            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " Cerulean Proclaimation", function () { }); // Dont do anything on click
             m = app.drop.addMenu("group", "Prospects", function () { });
             m.addMenu("srchProsp", B.img("SEARCH"), "Search for prospect", function () { openDialog("dlgSearchProspect"); });
             m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); });
             m = app.drop.addMenu("util", "Utilities", function() { });
-            m.addMenu("profile", B.img("ACCOUNT"), "My Profile", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "User Profile") });
-            m.addMenu("feedback", B.img("FEEDBACK"), "Feedback", function () { openDialog("dlgFeedback") });
+            m.addMenu("profile", B.img("ACCOUNT"), "My Profile / Feedback", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "Profile") });
             app.drop.render("dropMenu");
 
-            window.itabs = new B.iTabset("itabs", 650, "99.5%");
+            window.itabs = new B.iTabset("itabs", 650, "1000px");
+            itabs.onBeforeTabAdd = function(id, title, src) {
+                if (itabs.tabCount >= 8) {
+                    sayWarn("Sorry, only " + itabs.tabCount + " tabs can be opened at the same time.<br><br>" + 
+                        "You must close one of the existing tabs before opening the tab...<br>&nbsp;&nbsp;<b>" + title + "</b>.");
+                    return false;
+                }
+            }
             itabs.onAfterTabSet = function (tab) {
                 document.title = "BQ: " + tab.title;
             }
@@ -42,6 +48,16 @@
                 itabs.setTab("recents");
             }
             loadFrame("recents", "home.htm", "HOME", "Home", false);
+        }
+
+        function replaceFrame(curcode, code, url, img, title, removable) {
+            if (removable == undefined) removable = true;
+            var tab = itabs.tabs[curcode];
+            if (tab == undefined) {
+                loadFrame(code, url, img, title, removable);
+            } else {
+                top.itabs.replaceTabWithImage(curcode, code, img, title, url, removable);
+            }
         }
 
         function loadFrame(code, url, img, title, removable) {
@@ -61,7 +77,13 @@
             if (id == undefined) {
                 id = B.getForm("dlgSearchProspect").get("pid");
             }
-            loadFrame("prosp|" + id, "prospect.htm?id=" + id, "COMPANY", "Prosp #" + id);
+            loadFrame("prosp|" + id, "prospect.htm?id=" + id, "COMPANY", id);
+        }
+        function gotoQuote(pid, id) {
+            if (id == undefined) id = "NEW";
+            var title = id;
+            if (id == "NEW") title = "New Quote";
+            loadFrame("quote|" + id, "quote.htm?pid=" + pid + "&id=" + id, "QUOTE", title);
         }
 
         function saveProfile() {
@@ -91,10 +113,5 @@
 </form>
 
 
-<form id='dlgFeedback' class='BDialog' title='BlueQuote Feedback' style='height:450px; width:500px;'>
-
-    <button class="BDialogButton" onclick='if (sendFeedback()) popDialog();'>Send Feedback</button>
-    <button class="BDialogButton" onclick='popDialog()'>Cancel</button>
-</form>
 </body>
 </html>

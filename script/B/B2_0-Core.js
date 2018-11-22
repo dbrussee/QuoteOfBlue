@@ -12,7 +12,8 @@ $(document).ready(function () {
 	$('form.block, form.BDialog').bind('submit', function (e) { e.preventDefault(); });
 	$(document).tooltip({ track: true });
 	//$(":button").button();
-	$("input[type='text'], textarea").attr('spellcheck', false);
+	$("input[type='text'], input:not([type]), textarea").attr('spellcheck', false);
+	$("input[type='text'], input:not([type])").attr('autocomplete', "off");
 	$("*[class*='BIMG-']").each(function () {
 		var parts = this.className.split("-");
 		var kind = parts[1].toUpperCase();
@@ -737,7 +738,7 @@ B.queryString = function (sField) { // Get text from the URL line
 		for (var i = 0; i < arr.length; i++) {
 			if (arr[i].indexOf("=") > -1) {
 				var arrNameValue = arr[i].split("=");
-				if (arrNameValue[0].toUpperCase().indexOf(sField) > -1) return unescape(arrNameValue[1]);
+				if (arrNameValue[0].toUpperCase() ==sField) return unescape(arrNameValue[1]);
 			}
 		}
 	} catch (ex) { return ""; }
@@ -1044,15 +1045,18 @@ B.setCSSRule("table.BScrollingTableHeader.sortDESC tr th.sortable.sorted:hover>d
 B.setCSSRule("table.BScrollingTableHeader.sortDESC tr th.sorted>div",
 	"background-image: linear-gradient(yellow, peachpuff, transparent, transparent); ");
 
-
+B.setCSSRule("table.form tr th, table.form tr td", "padding-top:1px; padding-bottom:0;");
 B.setCSSRule("table.form tr th",
 	"padding-right:.1em; " +
-	"text-align:right; " +
+	"text-align:right; vertical-align:top; " +
 	"font-weight:bold; color:navy; " +
 	"background-color:transparent;");
+B.setCSSRule("table.form tr td", "vertical-align:top;");
 B.setCSSRule("table.form tr.header th", "text-align:center");
 B.setCSSRule("table.form tr.head th", "text-align:center");
 B.setCSSRule("table.form tr.head2 th", "text-align:center;color:white;font-weight:normal;background-color:navy");
+B.setCSSRule("table.form tr td input:not([type])", "padding-left:0.1em");
+B.setCSSRule("table.form tr td input[type=text]", "padding-left:0.1em");
 
 
 B.setCSSRule(".BTab",

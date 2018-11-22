@@ -1,7 +1,8 @@
 B.iTabset = function(id, height, width) {
 	this.tabHeight = 28;
 	this.id = id;
-	this.height = height;
+    this.height = height;
+    this.tabCount = 0;
 	this.tabs = {};
 	this.onBeforeTabAdd = function() { return true; };
 	this.onAfterTabAdd = function() { return true; };
@@ -35,6 +36,7 @@ B.iTabset = function(id, height, width) {
 		itm.tab.parentNode.removeChild(itm.tab);
 		itm.iframe.parentNode.removeChild(itm.iframe);
         delete(this.tabs[id]);
+        this.tabCount--;
         this.onAfterTabRemove();
 	};
 	
@@ -53,14 +55,11 @@ B.iTabset.prototype.flashTab = function(id) {
     var tab = this.tabs[id];
     $(tab.tab).fadeTo("fast",0.1).fadeTo("fast",1);
 };
-B.iTabset.prototype.addTabWithImage = function(id, img, title, src, removable) {
-    var spn = "<span style='padding-left:.2em;'>" + title + "</span>";
-    var tab = this.addTab(id, B.img(img) + spn, src, removable);
-    tab.title = title;
-    return tab;
-}
 B.iTabset.prototype.addTab = function(id, title, src, removable) {
-	var rslt = this.onAfterTabAdd(id, title, src);
+    return this.addTabWithImage(id, null, title, src, removable);
+};
+B.iTabset.prototype.addTabWithImage = function(id, imgname, title, src, removable) {
+	var rslt = this.onBeforeTabAdd(id, title, src);
 	if (rslt == undefined) rslt = true;
 	if (!rslt) return null;
 	var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false };
@@ -73,8 +72,12 @@ B.iTabset.prototype.addTab = function(id, title, src, removable) {
 	var itm = document.createElement("div");
 	itm.className = "BTab";
 	itm.id = "B_ITAB_" + this.id + "_" + id;
-	itm.style.cssText = "padding:.2em 1.5em 0;margin:0;position:relative;top:0;height:" + this.tabHeight + "px;border-right:1px solid navy;display:inline-block;";
-	itm.innerHTML = title;
+    itm.style.cssText = "padding:.2em 1.5em 0;margin:0;position:relative;top:0;height:" + this.tabHeight + "px;border-right:1px solid navy;display:inline-block;";
+    var spn = "";
+    if (imgname != null) {
+        spn = "<span style='padding-right:.25em;'>" + B.img(imgname) + "</span>";
+    }
+	itm.innerHTML = spn + title;
 	if (removable == undefined) removable = false;
 	if (removable) {
 		var closer = document.createElement("div");
@@ -109,7 +112,8 @@ B.iTabset.prototype.addTab = function(id, title, src, removable) {
 	}
 	tab.iframe = frame;
 	this.frameContainer.appendChild(frame);
-	this.tabs[id] = tab;
+    this.tabs[id] = tab;
+    this.tabCount++;
 	this.onAfterTabAdd(tab);
 	tab.window = frame.contentWindow;
 	tab.setMe = $.proxy(function(event) {
@@ -124,6 +128,81 @@ B.iTabset.prototype.addTab = function(id, title, src, removable) {
     }, this);
 	return tab;
 };
+// TODO: Test ReplaceTab feature... 11/21/2018 dbrussee
+B.iTabset.prototype.replaceTab = function(oldid, id, title, src, removable) {
+    return this.replaceTabWithImage(oldid, id, null, title, src, removable);
+}
+B.iTabset.prototype.replaceTabWithImage = function(oldid, id, imgname, title, src, removable) {
+    var itm = this.tabs[oldid];
+    itm.iframe.parentNode.removeChild(itm.iframe);
+
+    var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false };
+	tab.freeze = function() {
+		this.tabset.setBusy(this.id, true);
+	};
+	tab.thaw = function() {
+		this.tabset.setBusy(this.id, false);
+    };
+    var itm = document.getElementById("B_ITAB_" + this.id + "_" + oldid);
+    itm.id = "B_ITAB_" + this.id + "_" + id;
+    for (var i = 0; i < itm.childNodes.length; i++) {
+        delete (itm.childNodes[i]);
+    }
+    var spn = "";
+    if (imgname != null) {
+        spn = "<span style='padding-right:.25em;'>" + B.img(imgname) + "</span>";
+    }
+	itm.innerHTML = spn + title;
+	if (removable == undefined) removable = false;
+	if (removable) {
+		var closer = document.createElement("div");
+		closer.setAttribute("data", tab);
+		closer.className = "BTabCloser";
+		//closer.title = "Close tab...";
+		closer.innerHTML = "x";
+		closer.onclick = $.proxy(function() {
+			var tab = this; // set via Proxy
+			askWarn("Close the tab named '" + tab.title + "'?", "", $.proxy(function(rslt) {
+				if (rslt == "YES") {
+					var tab = this; // set via Proxy
+					tab.tabset.closeTab(tab.id);
+				}
+			}, tab));
+		}, tab);
+		itm.appendChild(closer);
+	}
+	tab.tab = itm;
+	var frame = document.createElement("iframe");
+	frame.onload = $.proxy(function() {
+		tab.tabset.onAfterContentLoaded(this);
+	}, tab);
+    frame.setAttribute("height", this.height);
+    frame.style.cssText = "display:none" +
+        "padding:0;margin:0;border:0;" +
+        "width:100%;postion:relative:top:" + this.tabHeight + "px;" +
+		"sandbox:";
+	if (src != undefined && src != null) {
+		frame.src = src;
+	}
+	tab.iframe = frame;
+	this.frameContainer.appendChild(frame);
+    this.tabs[id] = tab;
+    delete this.tabs[oldid];
+	this.onAfterTabAdd(tab);
+	tab.window = frame.contentWindow;
+	tab.setMe = $.proxy(function(event) {
+		this.tabset.setTab(this.id);
+	}, tab);
+    tab.tab.onclick = $.proxy(function(event) {
+        var el = $(event.target)[0]; // A collection even though only one
+        if (el.className == "BTabCloser") return; // User is trying to close this tab!
+        var itm = $(el).closest("div")[0];            
+        var id = itm.id.split("_")[3]; // B_ITAB_tabset_thisid
+        this.setTab(id);
+    }, this);
+    tab.setMe();
+	return tab;
+}
 B.iTabset.prototype.enable = function(id, yn) {
     if (yn == undefined) yn = true;
     this.disable(id, !yn);

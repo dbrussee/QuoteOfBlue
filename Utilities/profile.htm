@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/style/default.css">
 
     <script src="/script/B/B2_0-Core.js"></script>
     <script src="/script/B/B2_0-Dialog.js"></script>
@@ -19,36 +20,46 @@
     function init() {
 
     }
-    function abort() {
-        askWarn("Are you sure you want to abandon any changes you have made to your profile?", "Cancel", function(rslt) {
-            if (rslt == "YES") {
-                top.itabs.closeTab("profile");
-            }
-        })
-    }
     function saveProfile() {
         // TODO: Save the profile... duh.
         top.B.growl.msg("Profile saved", "All changes to your profile have been saved.", 3000);
-        top.itabs.closeTab("profile");
+    }
+    function sendMessage() {
+        // TODO: Save the profile... duh.
+        top.B.growl.msg("Feedback", "Feedback message has been sent.", 3000);
     }
     
     </script>
 
 </head>
-<body>
-    <form id='frmProfile' onsubmit='event.preventDefault()'>
-        <table class='form'>
-            <tr><th>First Name</th><td><input name='fname' size='30'></td></tr>
+<body style='display:flex'>
+    <div>
+        <form id='frmProfile' onsubmit='event.preventDefault()'>
+            <table class='form'>
+                <tr><th>First Name:</th><td><input name='fname' size='30' value='Joe'></td></tr>
+                <tr><th>Last Name:</th><td><input name='lname' size='30' value='User'></td></tr>
+                <tr><th>User ID:</th><td><input name='uid' size='30' value='U764288'></td></tr>
+                <tr><th>Email:</th><td><input name='email' size='40' value='joe.user@bcbsnc.com'></td></tr>
 
 
-            <tr><td colspan='2'>&nbsp;</td></tr>
-            <tr><td colspan='2' style='text-align:center'>
-                <button onclick='saveProfile()'>Save Profile</button>
-                <button onclick='abort()'>Cancel</button>
-            </td></tr>
-        </table>
+                <tr><td colspan='2'>&nbsp;</td></tr>
+                <tr><td colspan='2' style='text-align:center'>
+                    <button onclick='saveProfile()'>Save Profile</button>
+                </td></tr>
+            </table>
 
 
-    </form>
+        </form>
+    </div>
+    <div style='margin-left:1em; border-left:1px solid navy; padding-left:1em;'>
+        <form id='frmProfile' onsubmit='event.preventDefault()'>
+            <table class='form'>
+                <tr><th style='vertical-align:top'>Feedback:</th><td><textarea name='msg' style='width:30em;height:10em;'></textarea></td></tr>
+                <tr><td colspan='2' style='text-align:center'>
+                    <button onclick='sendMessage()'>Send Feedback</button>
+                </td></tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

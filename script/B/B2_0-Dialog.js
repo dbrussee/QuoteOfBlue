@@ -80,7 +80,7 @@ function closeDialog(id) {
 function sayBase(msg, title, callback, height, width, btns) {
 	if (btns == undefined) btns = [];
 	if (btns == "" || btns == null) btns = [];
-	if (callback == undefined) callback = null;
+	if (callback == undefined) callback = function() {};
 	if (width == undefined) width = 350;
 	if (height == undefined) height = 250;
 	if (btns.length == 0) btns = [{ text: 'Ok', click: function () { closeDialog("B-Say-Dialog"); callback(); } }];

@@ -8,12 +8,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/style/default.css">
 
     <script src="script/B/B2_0-Core.js"></script>
     <script src="script/B/B2_0-Dialog.js"></script>
     <script src="script/B/B2_0-Data.js"></script>
     <script src="script/B/B2_0-Table.js"></script>
     <script src="script/B/B2_0-Menu.js"></script>
+    <script src="script/default.js"></script>
 
     <script>
     function init() {
@@ -26,30 +28,63 @@
 
         var id = B.queryString("ID");
         var frm = new B.Form("frmProspect");
+        var div = document.getElementById("divPrevQuotes");
         if (id == "") {
-
         } else {
+            $(div).show();
             frm.set("pid", id);
             frm.set("eina","00", "einb","0000000");
             frm.set("grpnam","Sample group name");
-            tblP.addRows("11111\t2/1/2019\tPPO1\t11/5/2018 15:22:11");
             tblP.footer.enableButton("add");
         }
     }
+
+    function saveNewProspect() {
+        var thistab = top.itabs.getTab(window);
+        var newid = "543" + new Date().getMilliseconds();
+        while (top.itabs.getTab("prosp|" + newid) != null) {
+            newid = "543" + new Date().getMilliseconds();
+        }
+        top.replaceFrame(thistab.id, "prosp|" + newid, "prospect.htm?id=" + newid, "COMPANY", newid, true);
+    }
     
     function saveProspect() {
-        sayWarn("Saving not coded yet.");
+        var id = B.queryString("ID");
+        if (id == "") {
+            createNewProspect();
+        } else {
+            sayWarn("Saving not coded yet.");
+        }
     }
     function pickNAICS() {
         sayWarn("NAICS picker not coded yet.");
     }
+    function calcSEI() {
+        var frm = B.getForm("frmProspect");
+        var cnt = parseInt(frm.get("ftecnt"),10);
+        var loc = document.getElementById("locSEI");
+        if (isNaN(cnt)) {
+            loc.style.color = "red";
+            loc.innerHTML = "??";
+        } else {
+            loc.style.color = "";
+            if (cnt < 51) {
+                loc.innerHTML = "Small";
+            } else {
+                loc.innerHTML = "Large";
+            }
+        }
+    }
     function addQuote() {
         var frm = B.getForm("frmProspect");
-        sayWarn("Add Quote for prospect " + frm.get("pid") + " not coded yet.");
+        //sayWarn("Add Quote for prospect " + frm.get("pid") + " not coded yet.");
+        tblP.addRows("11111\t2/1/2019\tPPO1\t11/5/2018 15:22:11");
+        top.gotoQuote(frm.get("pid"), "NEW");
     }
     function editQuote() {
         var rd = tblP.getDataRow();
-        sayWarn("Edit of quote " + rd.qid.val + " not coded yet.");
+        var frm = B.getForm("frmProspect");
+        top.gotoQuote(frm.get("pid"), rd.qid.val);
     }
 
     </script>
@@ -60,7 +95,7 @@
     <form id='frmProspect' onsubmit='event.preventDefault()'>
         <table class='form'>
             <tr><th>Prospect #:</th><td><input name='pid' size='6' disabled></td></tr>
-            <tr><th>EIN:</th><td><input size='2' name='eina'> - <input size='8' name='einb'></td></tr>
+            <tr><th>Tax ID (EIN):</th><td><input size='2' name='eina'> - <input size='8' name='einb'></td></tr>
             <tr><th>Group Name:</th><td><input name='grpnam' size='30' value=''></td></tr>
             <tr><th>Street Adr1:</th><td><input name='addrl1' size='30' value=''></td></tr>
             <tr><th>Street Adr2:</th><td><input name='addrl2' size='30' value=''></td></tr>
@@ -70,20 +105,19 @@
             <tr><th>Contact:</th><td><input name='contact' size='30' value=''></td></tr>
             <tr><th>Phone:</th><td><input name='phnnum' size='30' value=''></td></tr>
             <tr><th>Fax:</th><td><input name='faxnum' size='30' value=''></td></tr>
-            <tr><th>FT Equiv:</th><td><input name='ftecnt' size='5' value=''></td></tr>
-            <tr><th>Small Emp:</th><td><label><input name='smlemp' type='radio' value='Y' checked>Yes<label>, <input name='smlemp' type='radio' value='N'>No</label></td></tr>
+            <tr><th>FT Equiv:</th><td><input name='ftecnt' onkeyup='calcSEI()' size='5' value=''> Segment: <span id='locSEI'>??</span></td></tr>
             <tr><th>NAICS Code:</th><td><input name='naics' size='6' value=''>&nbsp;<span class='anchor' onclick='pickNAICS()'>Pick...</span></td></tr>
             <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
             <tr><td colspan='2' style='text-align:center'>
-                <button onclick='saveProspect()'>Save Prospect</button>
+                <button onclick='saveNewProspect()'>Save Prospect</button>
             </td></tr>
 
         </table>
 
     </form>
     </div>
-    <div style='margin-left:1em; border-left:1px solid navy; padding-left:1em;'>
-        <table id='tblPrevious' title='Previous Quotes'>
+    <div id='divPrevQuotes' style='margin-left:1em; border-left:1px solid navy; padding-left:1em; display:none; '>
+        <table id='tblPrevious' title='Recent Quotes'>
             <tr><th data='qid,100'>Quote ID</th>
                 <th data='effdat,110'>Effective</th>
                 <th data='lob,100'>LOB</th>

@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/style/default.css">
 
     <script src="script/B/B2_0-Core.js"></script>
     <script src="script/B/B2_0-Dialog.js"></script>
@@ -18,7 +19,6 @@
     <script>
     function init() {
         window.recents = new B.ScrollingTable("tblRecents", 200, "prosp,grpnum,slstyp,taxnum,grpnam,zipcod,prdnam,lastts:%", "group", "groups");
-        recents.setTitle("Recent groups / quotes");
         recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
             top.gotoProspect(rd.prosp.raw);
         }
@@ -41,9 +41,9 @@
 
 </head>
 <body>
-    <table id='tblRecents'>
+    <table id='tblRecents', title='Recent Prospects'>
         <tr><th data='prosp,70,R'>Prospect</th>
-            <th data='grpnum,65,C'>Group#</th>
+            <th data='grpnum,75,C'>Group#</th>
             <th data='slstyp,55,C'>Type</th>
             <th data='taxnum,90,C'>EIN</th>
             <th data='grpnam,220'>Group Name</th>

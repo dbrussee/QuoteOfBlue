@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prospect</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/style/default.css">
+
+    <script src="script/B/B2_0-Core.js"></script>
+    <script src="script/B/B2_0-Dialog.js"></script>
+    <script src="script/B/B2_0-Data.js"></script>
+    <script src="script/B/B2_0-Table.js"></script>
+    <script src="script/B/B2_0-Menu.js"></script>
+
+    <script>
+    function init() {
+        var pid = B.queryString("PID");
+        var id = B.queryString("ID");
+        var frm = new B.Form("frmQuote");
+        frm.set("pid", pid);
+        if (id == "") {
+
+        } else {
+            frm.set("qid", id);
+            frm.set("lob","PPO1 - Blue Options");
+        }
+    }
+
+    function saveQuote() {
+        sayWarn("Saving quote not coded yet.");
+    }
+
+    </script>
+
+</head>
+<body style='display:flex;'>
+    <div>
+    <form id='frmQuote' onsubmit='event.preventDefault()'>
+        <table class='form'>
+            <tr><th>Prospect #:</th><td><input name='pid' size='6' disabled></td></tr>
+            <tr><th>Quote #:</th><td><input name='qid' size='6' disabled></td></tr>
+            <tr><th>LOB:</th><td><input size='30' name='lob'></td></tr>
+            <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
+            <tr><td colspan='2' style='text-align:center'>
+                <button onclick='saveQuote()'>Save Quote</button>
+            </td></tr>
+
+        </table>
+
+    </form>
+    </div>
+</body>
+</html>
