@@ -22,6 +22,7 @@
 
     <script>
         var app = {};
+        app.goBackTab = null;
         function init() {
             app.drop = new B.DropdownMenu();
             var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
@@ -43,9 +44,19 @@
             }
             itabs.onAfterTabSet = function (tab) {
                 document.title = "BQ: " + tab.title;
+                if (tab.id.indexOf("prosp|") == 0) app.goBackTab = tab.id;
             }
             itabs.onAfterTabRemove = function() {
-                itabs.setTab("recents");
+                if (app.goBackTab == null) {
+                    itabs.setTab("recents");
+                } else {
+                    var tab = itabs.tabs[app.goBackTab];
+                    if (tab != null) {
+                        tab.setMe();
+                    } else {
+                        itabs.setTab("recents");
+                    }
+                }
             }
             loadFrame("recents", "home.htm", "HOME", "Home", false);
         }
