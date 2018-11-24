@@ -31,14 +31,14 @@
             app.drop = new B.DropdownMenu();
             var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
             var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " BlueQuote™", function () { }); // Dont do anything on click
-            m = app.drop.addMenu("group", "Prospects", function () { });
+            m = app.drop.addMenu("group", "Prospect", function () { });
             m.addMenu("srchProsp", B.img("SEARCH"), "Search for prospect", function () { openDialog("dlgSearchProspect"); });
             m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); });
-            m = app.drop.addMenu("util", "Utilities", function() { });
+            m = app.drop.addMenu("util", "Utility", function() { });
             m.addMenu("profile", B.img("ACCOUNT"), "My Profile / Feedback", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "Profile") });
             app.drop.render("dropMenu");
 
-            window.itabs = new B.iTabset("itabs", 650, "1000px");
+            window.itabs = new B.iTabset("itabs", 650, "1200px");
             itabs.onBeforeTabAdd = function(id, title, src) {
                 if (itabs.tabArray.length >= 8) {
                     sayWarn("Sorry, only " + itabs.tabArray.length + " tabs can be opened at the same time.<br><br>" + 
