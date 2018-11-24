@@ -19,17 +19,24 @@
     <script>
     function init() {
         window.recents = new B.ScrollingTable("tblRecents", 200, "prosp,grpnum,slstyp,taxnum,grpnam,zipcod,prdnam,lastts:%", "group", "groups");
+        recents.onBeforeRowRender = function(rn, rd, tr, tds) {
+            top.app.data.prospects[rd.prosp.val] = { pid:rd.prosp.val, grpnum:rd.grpnum.val, grpnam:rd.grpnam.val, quotes:[] };
+        }
         recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
             top.gotoProspect(rd.prosp.raw);
         }
-        recents.footer.addButton("say", "Say Hi", function() { 
-            B.freezeThings(recents, top.itabs.getTab(window), "I am now frozen.");
-            top.itabs.disable("prosp|NEW");
-            say("Hello there", "A message", function() { 
-                top.itabs.enable("prosp|NEW");
-                B.thawThings();
-            }); 
+        recents.footer.addButton("new", "Add Prospect", function() {
+            top.loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); 
         });
+        recents.footer.addButton("edit", "Edit Prospect", function() {
+            var rd = recents.getDataRow();
+            top.gotoProspect(rd.prosp.raw);
+        }, true).disable();
+        recents.footer.addSpace();
+        recents.footer.addButton("newq", "New Quote", function() {
+            var rd = recents.getDataRow();
+            top.gotoQuote(rd.prosp.raw, "NEW");
+        }, true).disable();
         recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
             "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
             "286801\t074137\tRnwl\t91-1943799\tWILKES DENTAL CONSORTIUM\t28659\tSUSAN DENNY\t11/15/2018 2:15:35\n" +

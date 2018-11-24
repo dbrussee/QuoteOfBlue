@@ -7,7 +7,7 @@ B.DataColumn = function(id, typecode) {
 	// @/d: Date				%: Timestamp (Date/Time)
 	// b: Boolean				$: Dollars (2 decimal points)
 	// _: Trailing underscore means it is not autotrimmed
-	// !: The field is required
+	// !/R: The field is required
 	// *: The field is a key (and therefore automatcially required)
 	if (typecode == undefined) typecode = "t";
 	this.typ = "t";
@@ -19,7 +19,7 @@ B.DataColumn = function(id, typecode) {
 		var ch = typecode.charAt(i);
 		if (ch == "_") this.autotrim = false;
 		else if (ch == "*") { this.key = true; this.req = true; }
-		else if (ch == "!") this.req = true;
+		else if (ch == "!" || ch == "R") this.req = true;
 		else {
 			if (ch == "d") ch = "@";
 			if (ch == "n") ch = "#";

@@ -1055,8 +1055,8 @@ B.setCSSRule("table.form tr td", "vertical-align:top;");
 B.setCSSRule("table.form tr.header th", "text-align:center");
 B.setCSSRule("table.form tr.head th", "text-align:center");
 B.setCSSRule("table.form tr.head2 th", "text-align:center;color:white;font-weight:normal;background-color:navy");
-B.setCSSRule("table.form tr td input:not([type])", "padding-left:0.1em");
-B.setCSSRule("table.form tr td input[type=text]", "padding-left:0.1em");
+B.setCSSRule("table.form tr td input:not([type])", "padding-left:0.13em");
+B.setCSSRule("table.form tr td input[type=text]", "padding-left:0.13em");
 
 
 B.setCSSRule(".BTab",
@@ -1091,10 +1091,11 @@ B.setCSSRule(".BTab:hover div.BTabCloser",
 	"width:12px; " +
 	"top:0; " +
 	"right:0; " +
+	"border-radius:25%; " +
 	"margin-right:-5px; " +
 	"margin-top:-8px; " +
 	"font-size:9px; font-weight:bold; ");
-B.setCSSRule(".BTab:hover div.BTabCloser:hover", "color:yellow;background-color:red !important;width:18px;height:18px;font-size:12px;");
+B.setCSSRule(".BTab:hover div.BTabCloser:hover", "color:yellow;background-color:red !important;width:22px;height:22px;font-size:14px;");
 B.setCSSRule(".BTab div.BTabCloser", "display:none;");
 B.setCSSRule("select.mono option",
 	"font-family: Consolas, \"Lucida Console\", Monaco, monospace; " +

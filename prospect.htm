@@ -18,24 +18,48 @@
     <script src="script/default.js"></script>
 
     <script>
+    app = { pid: B.queryString("ID") }
     function init() {
-        window.tblP = new B.ScrollingTable("tblPrevious", 300, "qid,effdat,lob,lastts:%", "quote", "quotes");
+        window.tblP = new B.ScrollingTable("tblPrevious", 300, "qid:#,effdat:@,lob,lastts:%", "quote", "quotes");
         tblP.footer.addButton("add", "Add", function() { addQuote(); }).disable();
         tblP.footer.addButton("edit", "Edit", function() { editQuote(); }, true).disable();
         tblP.ondblclick = function() {
             editQuote();
         }
 
-        var id = B.queryString("ID");
-        var frm = new B.Form("frmProspect");
+        var frm = new B.Form("frmProspect")
         var div = document.getElementById("divPrevQuotes");
-        if (id == "") {
+        if (app.pid == "") {
+            frm.set("grpnam", "New Prospect");
         } else {
             $(div).show();
-            frm.set("pid", id);
+            var prosp = top.app.data.prospects[app.pid];
+            frm.set("pid", app.pid);
             frm.set("eina","00", "einb","0000000");
-            frm.set("grpnam","Sample group name");
+            frm.set("grpnam",prosp.grpnam);
             tblP.footer.enableButton("add");
+        }
+
+        loadQuotes();
+    }
+
+    function loadQuotes() {
+        tblP.clear();
+        var prosp = top.app.data.prospects[app.pid];
+        if (prosp != null) {
+            var qlist = prosp.quotes;
+            qlist = qlist.sort(function (a,b) {
+                if (a.ts < b.ts) return 1;
+                if (b.ts < a.ts) return -1;
+                return 0;
+            });
+            for (var i = 0; i < qlist.length; i++) {
+                var quote = qlist[i];
+                addQuoteToTable(quote.id, quote.effdat, quote.lob, quote.ts);
+            }
+            if (qlist.length > 0) {
+                tblP.pick(0);
+            }
         }
     }
 
@@ -45,13 +69,13 @@
         while (top.itabs.getTab("prosp|" + newid) != null) {
             newid = "543" + new Date().getMilliseconds();
         }
+        app.pid = newid;
         top.replaceFrame(thistab.id, "prosp|" + newid, "prospect.htm?id=" + newid, "COMPANY", newid, true);
     }
     
     function saveProspect() {
-        var id = B.queryString("ID");
-        if (id == "") {
-            createNewProspect();
+        if (app.pid == "") {
+            saveNewProspect();
         } else {
             sayWarn("Saving not coded yet.");
         }
@@ -77,8 +101,6 @@
     }
     function addQuote() {
         var frm = B.getForm("frmProspect");
-        //sayWarn("Add Quote for prospect " + frm.get("pid") + " not coded yet.");
-        tblP.addRows("11111\t2/1/2019\tPPO1\t11/5/2018 15:22:11");
         top.gotoQuote(frm.get("pid"), "NEW");
     }
     function editQuote() {
@@ -86,7 +108,9 @@
         var frm = B.getForm("frmProspect");
         top.gotoQuote(frm.get("pid"), rd.qid.val);
     }
-
+    function addQuoteToTable(qid, effdat, lob, ts) {
+        tblP.addRows(qid + "\t" + effdat + "\t" + lob + "\t" + ts);
+    }
     </script>
 
 </head>
@@ -99,8 +123,8 @@
             <tr><th>Group Name:</th><td><input name='grpnam' size='30' value=''></td></tr>
             <tr><th>Street Adr1:</th><td><input name='addrl1' size='30' value=''></td></tr>
             <tr><th>Street Adr2:</th><td><input name='addrl2' size='30' value=''></td></tr>
-            <tr><th>City:</th><td><input name='citynm' size='15' disabled value=''>, <input name='statcd' size='2' disabled value='NC'></td></tr>
-            <tr><th>Zip:</th><td><input name='zipcod' size='5' value=''></td></tr>
+            <tr><th>City, State:</th><td><input name='citynm' size='15' disabled value=''>, <input name='statcd' size='2' disabled value='NC'></td></tr>
+            <tr><th>Zip Code:</th><td><input name='zipcod' size='5' value=''></td></tr>
             <tr><th>NC County:</th><td><input name='county' size='30' disabled value=''></td></tr>
             <tr><th>Contact:</th><td><input name='contact' size='30' value=''></td></tr>
             <tr><th>Phone:</th><td><input name='phnnum' size='30' value=''></td></tr>
@@ -109,7 +133,7 @@
             <tr><th>NAICS Code:</th><td><input name='naics' size='6' value=''>&nbsp;<span class='anchor' onclick='pickNAICS()'>Pick...</span></td></tr>
             <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
             <tr><td colspan='2' style='text-align:center'>
-                <button onclick='saveNewProspect()'>Save Prospect</button>
+                <button onclick='saveProspect()'>Save Prospect</button>
             </td></tr>
 
         </table>
@@ -121,7 +145,7 @@
             <tr><th data='qid,100'>Quote ID</th>
                 <th data='effdat,110'>Effective</th>
                 <th data='lob,100'>LOB</th>
-                <th data='lastts,160,LSD'>Last Save</th>
+                <th data='lastts,160,LSD'>Saved</th>
             </tr></table>
     </div>
 </body>

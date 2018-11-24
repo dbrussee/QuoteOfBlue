@@ -22,11 +22,15 @@
 
     <script>
         var app = {};
+        app.data = {
+            recent: {},
+            prospects: {}
+        }
         app.goBackTab = null;
         function init() {
             app.drop = new B.DropdownMenu();
             var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
-            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " Cerulean Proclaimation", function () { }); // Dont do anything on click
+            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " BlueQuote™", function () { }); // Dont do anything on click
             m = app.drop.addMenu("group", "Prospects", function () { });
             m.addMenu("srchProsp", B.img("SEARCH"), "Search for prospect", function () { openDialog("dlgSearchProspect"); });
             m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); });
@@ -48,17 +52,17 @@
             }
             itabs.onAfterTabRemove = function() {
                 if (app.goBackTab == null) {
-                    itabs.setTab("recents");
+                    itabs.setTab("home");
                 } else {
                     var tab = itabs.tabs[app.goBackTab];
                     if (tab != null) {
                         tab.setMe();
                     } else {
-                        itabs.setTab("recents");
+                        itabs.setTab("home");
                     }
                 }
             }
-            loadFrame("recents", "home.htm", "HOME", "Home", false);
+            loadFrame("home", "home.htm", "HOME", "Home", false);
         }
 
         function replaceFrame(curcode, code, url, img, title, removable) {

@@ -1,8 +1,10 @@
-B.iTabset = function(id, height, width) {
+B.iTabset = function(id, height, width, hoverMode) {
+    if (hoverMode == undefined) hoverMode = false;
 	this.tabHeight = 28;
 	this.id = id;
     this.height = height;
     this.tabCount = 0;
+    this.hoverMode = hoverMode; // Hovering over a tab will show iFrame contents in a mini-window
 	this.tabs = {};
 	this.onBeforeTabAdd = function() { return true; };
 	this.onAfterTabAdd = function() { return true; };
@@ -62,7 +64,7 @@ B.iTabset.prototype.addTabWithImage = function(id, imgname, title, src, removabl
 	var rslt = this.onBeforeTabAdd(id, title, src);
 	if (rslt == undefined) rslt = true;
 	if (!rslt) return null;
-	var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false };
+	var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false, askToClose:true };
 	tab.freeze = function() {
 		this.tabset.setBusy(this.id, true);
 	};
@@ -85,14 +87,23 @@ B.iTabset.prototype.addTabWithImage = function(id, imgname, title, src, removabl
 		closer.className = "BTabCloser";
 		//closer.title = "Close tab...";
 		closer.innerHTML = "x";
-		closer.onclick = $.proxy(function() {
-			var tab = this; // set via Proxy
-			askWarn("Close the tab named '" + tab.title + "'?", "", $.proxy(function(rslt) {
-				if (rslt == "YES") {
-					var tab = this; // set via Proxy
-					tab.tabset.closeTab(tab.id);
-				}
-			}, tab));
+		closer.onclick = $.proxy(function(event) {
+            var tab = this; // set via Proxy
+            // Dont ask if shift or control key are pressed
+            if (event.shiftKey) tab.askToClose = false;
+            if (event.ctrlKey) tab.askToClose = false;
+            if (tab.askToClose) {
+                var msg = "Close the tab named '" + tab.title + "'?<br><br><i style='color:brown'>If there is any " +
+                    "unsaved data, it will be lost permanently</i>.";
+                chooseWarn(msg, "Close Tab", "Close Tab,Cancel", $.proxy(function(rslt) {
+                    if (rslt == 1) {
+                        var tab = this; // set via Proxy
+                        tab.tabset.closeTab(tab.id);
+                    }
+                }, tab));    
+            } else {
+                tab.tabset.closeTab(tab.id);
+            }
 		}, tab);
 		itm.appendChild(closer);
 	}
@@ -136,7 +147,7 @@ B.iTabset.prototype.replaceTabWithImage = function(oldid, id, imgname, title, sr
     var itm = this.tabs[oldid];
     itm.iframe.parentNode.removeChild(itm.iframe);
 
-    var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false };
+    var tab = { id:id, title:title, tabset:this, iframe:null, tab:null, window:null, setMe:null, disabled:false, busy:false, askToClose:true };
 	tab.freeze = function() {
 		this.tabset.setBusy(this.id, true);
 	};
@@ -161,13 +172,19 @@ B.iTabset.prototype.replaceTabWithImage = function(oldid, id, imgname, title, sr
 		//closer.title = "Close tab...";
 		closer.innerHTML = "x";
 		closer.onclick = $.proxy(function() {
-			var tab = this; // set via Proxy
-			askWarn("Close the tab named '" + tab.title + "'?", "", $.proxy(function(rslt) {
-				if (rslt == "YES") {
-					var tab = this; // set via Proxy
-					tab.tabset.closeTab(tab.id);
-				}
-			}, tab));
+            var tab = this; // set via Proxy
+            if (tab.askToClose) {
+                var msg = "Close the tab named '" + tab.title + "'?<br><br><i style='color:brown'>If there is any " +
+                    "unsaved data, it will be lost permanently</i>.";
+                chooseWarn(msg, "Close Tab", "Close Tab,Cancel", $.proxy(function(rslt) {
+                    if (rslt == 1) {
+                        var tab = this; // set via Proxy
+                        tab.tabset.closeTab(tab.id);
+                    }
+                }, tab));
+            } else {
+                tab.tabset.closeTab(tab.id);
+            }
 		}, tab);
 		itm.appendChild(closer);
 	}
