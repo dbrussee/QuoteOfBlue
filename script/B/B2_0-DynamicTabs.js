@@ -3,7 +3,7 @@ B.iTabset = function(id, height, width, hoverMode) {
 	this.tabHeight = 28;
 	this.id = id;
     this.height = height;
-    this.tabCount = 0;
+    this.tabArray = [];
     this.hoverMode = hoverMode; // Hovering over a tab will show iFrame contents in a mini-window
 	this.tabs = {};
 	this.onBeforeTabAdd = function() { return true; };
@@ -34,12 +34,19 @@ B.iTabset = function(id, height, width, hoverMode) {
 	this.container.appendChild(this.frameContainer);
 	
 	this.closeTab = function(id) {
-		var itm = this.tabs[id];
+        var itm = this.tabs[id];
+        var position = 0;
+        for (var i = 0; i < this.tabArray.length; i++) {
+            if (this.tabArray[i].id == id) {
+                position = i;
+                this.tabArray.splice(position,1);
+                break;
+            }
+        }
 		itm.tab.parentNode.removeChild(itm.tab);
 		itm.iframe.parentNode.removeChild(itm.iframe);
         delete(this.tabs[id]);
-        this.tabCount--;
-        this.onAfterTabRemove();
+        this.onAfterTabRemove(position);
 	};
 	
 	this.getTabWindow = function(id) {
@@ -124,7 +131,7 @@ B.iTabset.prototype.addTabWithImage = function(id, imgname, title, src, removabl
 	tab.iframe = frame;
 	this.frameContainer.appendChild(frame);
     this.tabs[id] = tab;
-    this.tabCount++;
+    this.tabArray.push(tab);
 	this.onAfterTabAdd(tab);
 	tab.window = frame.contentWindow;
 	tab.setMe = $.proxy(function(event) {

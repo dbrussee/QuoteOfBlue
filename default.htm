@@ -40,8 +40,8 @@
 
             window.itabs = new B.iTabset("itabs", 650, "1000px");
             itabs.onBeforeTabAdd = function(id, title, src) {
-                if (itabs.tabCount >= 8) {
-                    sayWarn("Sorry, only " + itabs.tabCount + " tabs can be opened at the same time.<br><br>" + 
+                if (itabs.tabArray.length >= 8) {
+                    sayWarn("Sorry, only " + itabs.tabArray.length + " tabs can be opened at the same time.<br><br>" + 
                         "You must close one of the existing tabs before opening the tab...<br>&nbsp;&nbsp;<b>" + title + "</b>.");
                     return false;
                 }
@@ -49,17 +49,23 @@
             itabs.onAfterTabSet = function (tab) {
                 document.title = "BQ: " + tab.title;
                 if (tab.id.indexOf("prosp|") == 0) app.goBackTab = tab.id;
+                if (tab.id.indexOf("quote|") == 0) {
+                    var pid = tab.window.B.queryString("PID");
+                    app.goBackTab = "prosp|" + pid;
+                }
             }
-            itabs.onAfterTabRemove = function() {
-                if (app.goBackTab == null) {
-                    itabs.setTab("home");
-                } else {
+            itabs.onAfterTabRemove = function(position) {
+                var moved = false;
+                if (app.goBackTab != null) {
                     var tab = itabs.tabs[app.goBackTab];
                     if (tab != null) {
                         tab.setMe();
-                    } else {
-                        itabs.setTab("home");
+                        moved = true;
                     }
+                }
+                if (!moved) {
+                    if (position == 1 && itabs.tabArray.length > 1) position = 2;
+                    itabs.setTab(itabs.tabArray[position-1].id);
                 }
             }
             loadFrame("home", "home.htm", "HOME", "Home", false);
