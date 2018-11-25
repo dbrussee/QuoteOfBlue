@@ -25,8 +25,8 @@
         recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
             top.gotoProspect(rd.prosp.raw);
         }
-        recents.footer.addButton("new", "Add Prospect", function() {
-            top.loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); 
+        recents.footer.addButton("new", "New Prospect", function() {
+            top.newProspect(); 
         });
         recents.footer.addButton("edit", "Edit Prospect", function() {
             var rd = recents.getDataRow();
@@ -35,7 +35,7 @@
         recents.footer.addSpace();
         recents.footer.addButton("newq", "New Quote", function() {
             var rd = recents.getDataRow();
-            top.gotoQuote(rd.prosp.raw, "NEW");
+            top.gotoQuote(rd.prosp.raw, "");
         }, true).disable();
         recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
             "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
@@ -44,11 +44,27 @@
         );
     }
     
+    function findProspects() {
+        var frm = B.getForm("frmSearch").get();
+        var msg = "Searching has not been coded yet. However, if it was functional, it would be looking for:<br><br>";
+        msg += "<b>Prospect ID:</b> " + frm.pid;
+        msg += "<br><b>Name:</b> " + frm.grpnam;
+        sayWarn(msg);
+    }
     </script>
 
 </head>
 <body>
-    <table id='tblRecents', title='Recent Prospects'>
+    <form id='frmSearch' onsubmit='event.preventDefault();'>
+        <table class='form'>
+            <tr><th>Prospect ID:</th><td><input name='pid' size='10'></td>
+                <th>Name:</th><td><input name='grpnam' size='20'></td>
+                <td><input type='button' onclick='findProspects()' value='Search'></td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <table id='tblRecents', title='Found Prospects'>
         <tr><th data='prosp,70,R'>Prospect</th>
             <th data='grpnum,75,C'>Group#</th>
             <th data='slstyp,55,C'>Type</th>

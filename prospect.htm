@@ -21,8 +21,8 @@
     app = { pid: B.queryString("ID") }
     function init() {
         window.tblP = new B.ScrollingTable("tblPrevious", 300, "qid:#,effdat:@,lob,lastts:%", "quote", "quotes");
-        tblP.footer.addButton("add", "Add", function() { addQuote(); }).disable();
-        tblP.footer.addButton("edit", "Edit", function() { editQuote(); }, true).disable();
+        tblP.footer.addButton("add", "New", function() { addQuote(); }).disable();
+        tblP.footer.addButton("edit", "Show", function() { editQuote(); }, true).disable();
         tblP.ondblclick = function() {
             editQuote();
         }
@@ -129,7 +129,7 @@
             <tr><th>Contact:</th><td><input name='contact' size='30' value=''></td></tr>
             <tr><th>Phone:</th><td><input name='phnnum' size='30' value=''></td></tr>
             <tr><th>Fax:</th><td><input name='faxnum' size='30' value=''></td></tr>
-            <tr><th>FT Equiv:</th><td><input name='ftecnt' onkeyup='calcSEI()' size='5' value=''> Segment: <span id='locSEI'>??</span></td></tr>
+            <tr><th>FT Equiv:</th><td><input name='ftecnt' onkeyup='calcSEI()' size='5' value=''> <span id='locSEI'>??</span></td></tr>
             <tr><th>NAICS Code:</th><td><input name='naics' size='6' value=''>&nbsp;<span class='anchor' onclick='pickNAICS()'>Pick...</span></td></tr>
             <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
             <tr><td colspan='2' style='text-align:center'>
@@ -141,7 +141,7 @@
     </form>
     </div>
     <div id='divPrevQuotes' style='margin-left:1em; border-left:1px solid navy; padding-left:1em; display:none; '>
-        <table id='tblPrevious' title='Recent Quotes'>
+        <table id='tblPrevious' title='Quote List'>
             <tr><th data='qid,100'>Quote ID</th>
                 <th data='effdat,110'>Effective</th>
                 <th data='lob,100'>LOB</th>

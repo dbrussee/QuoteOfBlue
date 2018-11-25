@@ -32,8 +32,21 @@
             var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
             var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " BlueQuote™", function () { }); // Dont do anything on click
             m = app.drop.addMenu("group", "Prospect", function () { });
-            m.addMenu("srchProsp", B.img("SEARCH"), "Search for prospect", function () { openDialog("dlgSearchProspect"); });
-            m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); });
+            m.addMenu("srchProsp", B.img("SEARCH"), "Open prospect", function () {
+                //msg, prompt, value, title, callback
+                var msg = "Enter a prospect number to open below."
+                askValue(msg, "Prospect:", "", "Prospect", function(rslt) {
+                    if (rslt == null) return;
+                    if (rslt == "") {
+                        ask("Did you want to create a new prospect?", "New Prospect", function(rslt) {
+                            if (rslt == "YES") newProspect();
+                        });
+                    } else {
+                        gotoProspect(rslt);
+                    }
+                });
+            });
+            m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { newProspect(); });
             m = app.drop.addMenu("util", "Utility", function() { });
             m.addMenu("profile", B.img("ACCOUNT"), "My Profile / Feedback", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "Profile") });
             app.drop.render("dropMenu");
@@ -94,6 +107,10 @@
             if (tab != undefined) itabs.setTab(tab.id);
         }
 
+        function newProspect() {
+            loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); 
+        }
+
         function gotoProspect(id) {
             if (id == undefined) {
                 id = B.getForm("dlgSearchProspect").get("pid");
@@ -122,7 +139,7 @@
 <div id='dropMenu' style='margin-bottom:1em'></div>
 <div id='itabs'></div>
 
-<form id='dlgSearchProspect' class='BDialog' title='Search for Prospect' style='height:450px; width:500px;'>
+<form id='dlgOpenProspect' class='BDialog' title='Search for Prospect' style='height:450px; width:500px;'>
     <table class='form' style='margin:0 auto'>
         <tr>
             <th>Prospect Number:</th>
