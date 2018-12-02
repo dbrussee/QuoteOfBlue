@@ -1,0 +1,53 @@
+body {
+    font-family: 'Roboto';
+    height: 100%;
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    padding: 0; margin: 0; border: 0;
+    grid-template-columns: 5px 1fr 5px;
+    grid-template-rows: 5px 70px 1fr 25px 5px;
+    grid-template-areas: 
+        ". . ."
+        ". h ."
+        ". c ."
+        ". f ."
+        ". . .";
+
+    font-size: 12pt;
+    overflow: hidden;
+}
+body * {
+    box-sizing: border-box;
+}
+#header { grid-area: h;
+    background-image: url('bcnc-logo.gif'), linear-gradient(to right bottom, white, cornflowerblue, #0000cc);
+    background-size: 230px, 100%;
+    background-position-x: 1em, 0;
+    background-position-y: 20px, 0;
+    background-repeat: no-repeat, repeat;
+    color: white;
+    padding: .2em;
+}
+
+#content { grid-area: c;
+    background-image: linear-gradient(to bottom right, bisque, linen);
+}
+#footer { grid-area: f;
+    border-top: 1px solid darkslategray;
+    background-color: gainsboro;
+    color: darkslategray;
+    font-size: 9pt;
+    padding: .3em .6em 0 .6em;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+#footerRight {
+    text-align: right;
+}
+
+#frmContent {
+    padding: 0; margin: 0; border: 0;
+    width:100%;
+    height:100%;
+}

@@ -1,0 +1,61 @@
+body {
+    height: 100%;
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    padding: 0; margin: 0; border: 0;
+    grid-auto-columns: minmax(min-content, 1fr) 90px;
+    grid-template-rows: 1.5em 1fr;
+    grid-template-areas: 
+    "h m"
+    "c m";
+    font-size: 12pt;
+    justify-items: center;
+}
+body * {
+    box-sizing: border-box;
+}
+#menu { grid-area: m;
+    background-image: linear-gradient(#0000cc,  #00004d);
+    color: white;
+    padding: .2em;
+    text-align: center;
+    font-size: 8pt;
+    width: 100%;
+}
+#content { grid-area: c;
+    padding: .2em;
+    padding-top: 1.5em;
+    overflow-x: hidden;
+}
+#headline { grid-area: h;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-areas: "hpt hpm";
+    background-color: silver;
+    padding-top: .2em;
+    color: navy;
+    width: 100%;
+    border-bottom: 1px solid navy;
+}
+#pagetitle { grid-area: hpt;
+    padding-left: .2em;
+}
+#pagemessage { grid-area: hpm;
+    text-align: center;
+}
+
+div.BQMenuItem {
+    cursor: pointer;
+    border-radius: .7em;
+    padding-bottom: .5em;
+}
+div.BQMenuItem:hover {
+    background-image: linear-gradient(to bottom right, rgba(255,255,255,.2),  rgba(255, 255, 255, .45),  rgba(255, 255, 255, 0));
+}
+
+@media print {
+    div.BQMenuItem {
+        visibility: hidden;
+    }
+}

@@ -5,6 +5,9 @@ window.B = { version: "2.0" }; // B2_0.js
 
 // Cusomize these settings to work as you want them
 B.settings = {}; // Sub files change these settings as needed
+B.settings.fontFamily = "Geneva, Verdana, sans-serif";
+B.settings.fontFamily = "Montserrat";
+B.settings.fontSize = "10pt";
 B.choiceValue = null;
 
 $(document).ready(function () {
@@ -994,16 +997,16 @@ B.setCSSRule = function (selector, styles, checkfirst) {
 	}
 };
 //B.setCSSRule("body, html", "position:absolute");
+B.setCSSRule("body, div, td, th, form",
+	"font-family:" + B.settings.fontFamily + "; " +
+	"font-size: " + B.settings.fontSize + ";");
 B.setCSSRule(".ui-dialog .ui-dialog-titlebar, " +
 	"ui-dialog .ui-dialog-buttonpane, " +
 	"ui-widget-header .ui-priority-primary, " +
-	".ui-widget, .ui-button", "font-size: 1.05em;");
-B.setCSSRule(".ui-dialog .ui-dialog-content", "font-size:1em;");
+	".ui-widget, .ui-button", "font-size: 11pt;");
+B.setCSSRule(".ui-dialog .ui-dialog-content", "font-size:12pt;");
 B.setCSSRule(".no-close .ui-dialog-titlebar-close", "display: none;");
 B.setCSSRule(".no-title .ui-dialog .ui-dialog-titlebar", "display: none;");
-B.setCSSRule("body, div, td, th, form",
-	"font-family:Geneva, Verdana, sans-serif; " +
-	"font-size: 10pt;");
 B.setCSSRule(".BDialog",
 	"z-index: 9999; " +
 	"display: none;");

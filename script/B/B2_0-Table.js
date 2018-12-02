@@ -314,7 +314,7 @@ B.ScrollingTable = function (rootId, height, ColumnSet, txt1, txt2, embedScrollb
 	this.footerDIV.appendChild(this.footerButtonsDIV);
 
 	this.footerMessageDIV = document.createElement("div");
-	this.footerMessageDIV.style.cssText = "text-align:right; display:inline-block; float:right; height:19px; " +
+	this.footerMessageDIV.style.cssText = "text-align:right; display:inline-block; float:right; height:19px; box-sizing:content-box;" +
 		"vertical-align:middle; padding-right: 5px; padding-top:5px; color:navy; background-color:transparent; font-size:9pt";
 	this.footerMessageDIV.innerHTML = "Howdy";
 	this.footerMessageDIV.ondblclick = $.proxy(function () {
@@ -327,7 +327,7 @@ B.ScrollingTable = function (rootId, height, ColumnSet, txt1, txt2, embedScrollb
 
 	// Add a status message section
 	this.footerStatusDIV = document.createElement("div");
-	this.footerStatusDIV.style.cssText = "text-align:left; display:inline-block; float:left; height:19px; " +
+	this.footerStatusDIV.style.cssText = "text-align:left; display:inline-block; float:left; height:19px box-sizing:content-box; " +
 		"vertical-align:middle; padding-top:5px; color:navy; background-color:transparent; font-size:9pt";
 	this.footerStatusDIV.innerHTML = "";
 	this.footerDIV.appendChild(this.footerStatusDIV);
@@ -342,7 +342,7 @@ B.ScrollingTable = function (rootId, height, ColumnSet, txt1, txt2, embedScrollb
 		},
 		addSpace: function () {
 			var div = document.createElement("div");
-			div.style.cssText = "display:inline-block; background-color:transparent; vertical-align:middle; height:17px; " +
+			div.style.cssText = "display:inline-block; background-color:transparent; vertical-align:middle; height:17px box-sizing:content-box; " +
 				"padding-right:5px; padding-left: 5px; padding-top: 4px; padding-bottom: 4px; border:1px solid transparent: color:navy; font-size:9pt; cursor:pointer";
 			div.innerHTML = "|";
 			div.onclick = function () { };
@@ -351,7 +351,7 @@ B.ScrollingTable = function (rootId, height, ColumnSet, txt1, txt2, embedScrollb
 		addButton: function (id, txt, onclick, watchpick) {
 			if (watchpick == undefined) watchpick = false;
 			var div = document.createElement("div");
-			div.style.cssText = "display:inline-block; background-color:transparent; vertical-align:middle; height:17px; " +
+			div.style.cssText = "display:inline-block; background-color:transparent; vertical-align:middle; height:17px box-sizing:content-box; " +
 				"padding-right:5px; padding-left: 5px; padding-top: 4px; padding-bottom: 4px; border:1px solid transparent; color:navy; font-size:9pt; cursor:pointer";
 			div.id = this.rootId + "_footer_" + id;
 			div.onmouseover = function () { this.style.backgroundColor = B.settings.ScrollingTable.footerHoverColor; };

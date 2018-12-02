@@ -4,23 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Prospect</title>
+    <title>Quote of Blue</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="/style/default.css">
 
-    <script src="script/B/B2_0-Core.js"></script>
-    <script src="script/B/B2_0-Dialog.js"></script>
-    <script src="script/B/B2_0-Data.js"></script>
-    <script src="script/B/B2_0-Table.js"></script>
-    <script src="script/B/B2_0-Menu.js"></script>
-    <script src="script/default.js"></script>
+    <script src="/script/B/B2_0-Core.js"></script>
+    <script src="/script/B/B2_0-Dialog.js"></script>
+    <script src="/script/B/B2_0-Data.js"></script>
+    <script src="/script/B/B2_0-Table.js"></script>
+    <script src="/script/B/B2_0-Menu.js"></script>
+    <script src="/script/B/B2_0-DynamicTabs.js"></script>
+    <script src="/script/B/B2_0-Growl.js"></script>
+    <script src="/script/default.js"></script>
+    <link rel="stylesheet" href="/css/page.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
     <script>
-    app = { pid: B.queryString("ID") }
+    var page = { pid: B.queryString("ID") }
     function init() {
-        window.tblP = new B.ScrollingTable("tblPrevious", 300, "qid:#,effdat:@,lob,lastts:%", "quote", "quotes");
+        BQ.setHeader("Prospect", page.pid == "" ? "New Prospect" : "Prospect " + page.pid);
+
+        //BQ.setFooter("BlueQuote Application", "v0.1 beta | Local Region");
+        window.menu = new BQ.SideMenu();
+        menu.addItem("home", "HOME", "Home", function() { BQ.loadPage("/pages/home.htm"); });
+
+        window.tblP = new B.ScrollingTable("tblPrevious", 220, "qid:#,effdat:@,lob,lastts:%", "quote", "quotes");
         tblP.footer.addButton("add", "New", function() { addQuote(); }).disable();
         tblP.footer.addButton("edit", "Show", function() { editQuote(); }, true).disable();
         tblP.ondblclick = function() {
@@ -29,12 +38,12 @@
 
         var frm = new B.Form("frmProspect")
         var div = document.getElementById("divPrevQuotes");
-        if (app.pid == "") {
+        if (page.pid == "") {
             frm.set("grpnam", "New Prospect");
         } else {
             $(div).show();
-            var prosp = top.app.data.prospects[app.pid];
-            frm.set("pid", app.pid);
+            var prosp = top.app.data.prospects[page.pid];
+            frm.set("pid", page.pid);
             frm.set("eina","00", "einb","0000000");
             frm.set("grpnam",prosp.grpnam);
             tblP.footer.enableButton("add");
@@ -42,10 +51,9 @@
 
         loadQuotes();
     }
-
     function loadQuotes() {
         tblP.clear();
-        var prosp = top.app.data.prospects[app.pid];
+        var prosp = top.app.data.prospects[page.pid];
         if (prosp != null) {
             var qlist = prosp.quotes;
             qlist = qlist.sort(function (a,b) {
@@ -110,43 +118,54 @@
     }
     function addQuoteToTable(qid, effdat, lob, ts) {
         tblP.addRows(qid + "\t" + effdat + "\t" + lob + "\t" + ts);
-    }
+    }        
     </script>
 
+    <style>
+    
+    #content {
+        display: grid;
+        grid-auto-columns: auto auto;
+        grid-auto-rows: 1fr;
+        grid-template-areas: "f g";
+        align-content: space-evenly;
+        grid-gap: 1em;
+    }
+    
+    </style>
 </head>
-<body style='display:flex;'>
-    <div>
-    <form id='frmProspect' onsubmit='event.preventDefault()'>
-        <table class='form'>
-            <tr><th>Prospect #:</th><td><input name='pid' size='6' disabled></td></tr>
-            <tr><th>Tax ID (EIN):</th><td><input size='2' name='eina'> - <input size='8' name='einb'></td></tr>
-            <tr><th>Group Name:</th><td><input name='grpnam' size='30' value=''></td></tr>
-            <tr><th>Street Adr1:</th><td><input name='addrl1' size='30' value=''></td></tr>
-            <tr><th>Street Adr2:</th><td><input name='addrl2' size='30' value=''></td></tr>
-            <tr><th>City, State:</th><td><input name='citynm' size='15' disabled value=''>, <input name='statcd' size='2' disabled value='NC'></td></tr>
-            <tr><th>Zip Code:</th><td><input name='zipcod' size='5' value=''></td></tr>
-            <tr><th>NC County:</th><td><input name='county' size='30' disabled value=''></td></tr>
-            <tr><th>Contact:</th><td><input name='contact' size='30' value=''></td></tr>
-            <tr><th>Phone:</th><td><input name='phnnum' size='30' value=''></td></tr>
-            <tr><th>Fax:</th><td><input name='faxnum' size='30' value=''></td></tr>
-            <tr><th>FT Equiv:</th><td><input name='ftecnt' onkeyup='calcSEI()' size='5' value=''> <span id='locSEI'>??</span></td></tr>
-            <tr><th>NAICS Code:</th><td><input name='naics' size='6' value=''>&nbsp;<span class='anchor' onclick='pickNAICS()'>Pick...</span></td></tr>
-            <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
-            <tr><td colspan='2' style='text-align:center'>
-                <button onclick='saveProspect()'>Save Prospect</button>
-            </td></tr>
-
-        </table>
-
-    </form>
+<body>
+<div id='content'>
+    <div style="grid-area: f">
+        <form id='frmProspect' onsubmit='event.preventDefault()'>
+            <table class='form'>
+                <tr><th>Tax ID (EIN):</th><td><input size='2' name='eina'> - <input size='8' name='einb'></td></tr>
+                <tr><th>Group Name:</th><td><input name='grpnam' size='30' value=''></td></tr>
+                <tr><th>Street Adr1:</th><td><input name='addrl1' size='30' value=''></td></tr>
+                <tr><th>Street Adr2:</th><td><input name='addrl2' size='30' value=''></td></tr>
+                <tr><th>City, State:</th><td><input name='citynm' size='15' disabled value=''>, <input name='statcd' size='2' disabled value='NC'></td></tr>
+                <tr><th>Zip Code:</th><td><input name='zipcod' size='5' value=''></td></tr>
+                <tr><th>NC County:</th><td><input name='county' size='30' disabled value=''></td></tr>
+                <tr><th>Contact:</th><td><input name='contact' size='30' value=''></td></tr>
+                <tr><th>Phone:</th><td><input name='phnnum' size='30' value=''></td></tr>
+                <tr><th>Fax:</th><td><input name='faxnum' size='30' value=''></td></tr>
+                <tr><th>FT Equiv:</th><td><input name='ftecnt' onkeyup='calcSEI()' size='5' value=''> <span id='locSEI'>??</span></td></tr>
+                <tr><th>NAICS Code:</th><td><input name='naics' size='6' value=''>&nbsp;<span class='anchor' onclick='pickNAICS()'>Pick...</span></td></tr>
+                <tr style='height:1.5em'><td colspan='2'>&nbsp;</td></tr>
+                <tr><td colspan='2' style='text-align:center'>
+                    <button onclick='saveProspect()'>Save Prospect</button>
+                </td></tr>
+            </table>
+        </form>
     </div>
-    <div id='divPrevQuotes' style='margin-left:1em; border-left:1px solid navy; padding-left:1em; display:none; '>
-        <table id='tblPrevious' title='Quote List'>
+    <div id='divPrevQuotes' style='grid-area: g'>
+        <table id='tblPrevious' title='Recent Quotes List'>
             <tr><th data='qid,100'>Quote ID</th>
                 <th data='effdat,110'>Effective</th>
                 <th data='lob,100'>LOB</th>
                 <th data='lastts,160,LSD'>Saved</th>
             </tr></table>
     </div>
+</div>
 </body>
 </html>

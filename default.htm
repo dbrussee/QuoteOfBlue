@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,138 +17,27 @@
     <script src="script/B/B2_0-DynamicTabs.js"></script>
     <script src="script/B/B2_0-Growl.js"></script>
     <script src="script/default.js"></script>
-    <link rel="stylesheet" href="style/default.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
     <script>
-        var app = {};
-        app.data = {
-            recent: {},
-            prospects: {}
-        }
-        app.goBackTab = null;
-        function init() {
-            app.drop = new B.DropdownMenu();
-            var css = "font-weight:bold;font-size:1.2em;color:navy;text-shadow: 2px 2px 2px gainsboro";
-            var m = app.drop.addMenu("help", "<span style='" + css + "'>" + B.img("MENU") + " BlueQuote™", function () { }); // Dont do anything on click
-            m = app.drop.addMenu("group", "Prospect", function () { });
-            m.addMenu("srchProsp", B.img("SEARCH"), "Open prospect", function () {
-                //msg, prompt, value, title, callback
-                var msg = "Enter a prospect number to open below."
-                askValue(msg, "Prospect:", "", "Prospect", function(rslt) {
-                    if (rslt == null) return;
-                    if (rslt == "") {
-                        ask("Did you want to create a new prospect?", "New Prospect", function(rslt) {
-                            if (rslt == "YES") newProspect();
-                        });
-                    } else {
-                        gotoProspect(rslt);
-                    }
-                });
-            });
-            m.addMenu("newProsp", B.img("ADD"), "New prospect", function () { newProspect(); });
-            m = app.drop.addMenu("util", "Utility", function() { });
-            m.addMenu("profile", B.img("ACCOUNT"), "My Profile / Feedback", function () { loadFrame("profile",  "Utilities/profile.htm", "ACCOUNT", "Profile") });
-            app.drop.render("dropMenu");
-
-            window.itabs = new B.iTabset("itabs", 650, "1200px");
-            itabs.onBeforeTabAdd = function(id, title, src) {
-                if (itabs.tabArray.length >= 8) {
-                    sayWarn("Sorry, only " + itabs.tabArray.length + " tabs can be opened at the same time.<br><br>" + 
-                        "You must close one of the existing tabs before opening the tab...<br>&nbsp;&nbsp;<b>" + title + "</b>.");
-                    return false;
-                }
-            }
-            itabs.onAfterTabSet = function (tab) {
-                document.title = "BQ: " + tab.title;
-                if (tab.id.indexOf("prosp|") == 0) app.goBackTab = tab.id;
-                if (tab.id.indexOf("quote|") == 0) {
-                    var pid = tab.window.B.queryString("PID");
-                    app.goBackTab = "prosp|" + pid;
-                }
-            }
-            itabs.onAfterTabRemove = function(position) {
-                var moved = false;
-                if (app.goBackTab != null) {
-                    var tab = itabs.tabs[app.goBackTab];
-                    if (tab != null) {
-                        tab.setMe();
-                        moved = true;
-                    }
-                }
-                if (!moved) {
-                    if (position == 1 && itabs.tabArray.length > 1) position = 2;
-                    itabs.setTab(itabs.tabArray[position-1].id);
-                }
-            }
-            loadFrame("home", "home.htm", "HOME", "Home", false);
-        }
-
-        function replaceFrame(curcode, code, url, img, title, removable) {
-            if (removable == undefined) removable = true;
-            var tab = itabs.tabs[curcode];
-            if (tab == undefined) {
-                loadFrame(code, url, img, title, removable);
-            } else {
-                top.itabs.replaceTabWithImage(curcode, code, img, title, url, removable);
-            }
-        }
-
-        function loadFrame(code, url, img, title, removable) {
-            if (removable == undefined) removable = true;
-            var tab = itabs.tabs[code];
-            if (tab == undefined) {
-                if (img == null || img == "") {
-                    tab = itabs.addTab(code, title, url, removable);
-                } else {
-                    tab = itabs.addTabWithImage(code, img, title, url, removable);
-                }
-            }
-            if (tab != undefined) itabs.setTab(tab.id);
-        }
-
-        function newProspect() {
-            loadFrame("prosp|NEW", "prospect.htm", "COMPANY", "New Prospect"); 
-        }
-
-        function gotoProspect(id) {
-            if (id == undefined) {
-                id = B.getForm("dlgSearchProspect").get("pid");
-            }
-            loadFrame("prosp|" + id, "prospect.htm?id=" + id, "COMPANY", id);
-        }
-        function gotoQuote(pid, id) {
-            if (id == undefined) id = "NEW";
-            var title = id;
-            if (id == "NEW") title = "New Quote";
-            loadFrame("quote|" + id, "quote.htm?pid=" + pid + "&id=" + id, "QUOTE", title);
-        }
-
-        function saveProfile() {
-            sayWarn("Profile saving not coded");
-            return false;
-        }
-        function sendFeedback() {
-            sayWarn("Feedback not coded");
-            return false;
-        }
+    function init() {
+        BQ.setFooter("Blue Cross NC // BlueQuote (v2.0.1 &beta;)", "Local  &nbsp;|&nbsp;  U764288");
+    }
     </script>
-
 </head>
 <body>
-<div id='dropMenu' style='margin-bottom:1em'></div>
-<div id='itabs'></div>
+    <div id='header'>
 
-<form id='dlgOpenProspect' class='BDialog' title='Search for Prospect' style='height:450px; width:500px;'>
-    <table class='form' style='margin:0 auto'>
-        <tr>
-            <th>Prospect Number:</th>
-            <td><input name='pid' value='12345'></td>
-        </tr>
-    </table>
-    <button class="BDialogButton" onclick='gotoProspect(); popDialog()'>Load Prospect</button>
-    <button class="BDialogButton" onclick='popDialog()'>Cancel</button>
-</form>
+    </div>
 
+    <div id='content'>
+        <iframe id='frmContent' src='pages/home.htm'></iframe>
+    </div>
 
+    <div id='footer'>
+        <div id='footerLeft'>Left</div>
+        <div id='footerRight'>Right</div>
+    </div>
 </body>
 </html>
