@@ -6,7 +6,7 @@ window.B = { version: "2.0" }; // B2_0.js
 // Cusomize these settings to work as you want them
 B.settings = {}; // Sub files change these settings as needed
 B.settings.fontFamily = "Geneva, Verdana, sans-serif";
-B.settings.fontFamily = "Montserrat";
+//B.settings.fontFamily = "Montserrat";
 B.settings.fontSize = "10pt";
 B.choiceValue = null;
 

@@ -18,14 +18,12 @@
     <script src="/script/B/B2_0-Growl.js"></script>
     <script src="/script/default.js"></script>
     <link rel="stylesheet" href="/css/page.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/two-column-page.css">
 
     <script>
-    var page = { pid: B.queryString("ID") }
     function init() {
-        BQ.setHeader("Prospect", page.pid == "" ? "New Prospect" : "Prospect " + page.pid);
+        BQ.setHeader("Prospect Data", top.prosp.pid == -1 ? "New Prospect" : "P#" + top.prosp.pid);
 
-        //BQ.setFooter("BlueQuote Application", "v0.1 beta | Local Region");
         window.menu = new BQ.SideMenu();
         menu.addItem("home", "HOME", "Home", function() { BQ.loadPage("/pages/home.htm"); });
 
@@ -38,14 +36,13 @@
 
         var frm = new B.Form("frmProspect")
         var div = document.getElementById("divPrevQuotes");
-        if (page.pid == "") {
+        if (top.prosp.pid == -1) {
             frm.set("grpnam", "New Prospect");
         } else {
             $(div).show();
-            var prosp = top.app.data.prospects[page.pid];
-            frm.set("pid", page.pid);
+            frm.set("pid",top.prosp.pid);
             frm.set("eina","00", "einb","0000000");
-            frm.set("grpnam",prosp.grpnam);
+            frm.set("grpnam",top.prosp.grpnam);
             tblP.footer.enableButton("add");
         }
 
@@ -121,22 +118,11 @@
     }        
     </script>
 
-    <style>
-    
-    #content {
-        display: grid;
-        grid-auto-columns: auto auto;
-        grid-auto-rows: 1fr;
-        grid-template-areas: "f g";
-        align-content: space-evenly;
-        grid-gap: 1em;
-    }
-    
-    </style>
 </head>
 <body>
 <div id='content'>
-    <div style="grid-area: f">
+    <div class='leftColumn'>
+    <div style='float:right;'>
         <form id='frmProspect' onsubmit='event.preventDefault()'>
             <table class='form'>
                 <tr><th>Tax ID (EIN):</th><td><input size='2' name='eina'> - <input size='8' name='einb'></td></tr>
@@ -158,7 +144,8 @@
             </table>
         </form>
     </div>
-    <div id='divPrevQuotes' style='grid-area: g'>
+    </div>
+    <div id='divPrevQuotes' class='rightColumn'>
         <table id='tblPrevious' title='Recent Quotes List'>
             <tr><th data='qid,100'>Quote ID</th>
                 <th data='effdat,110'>Effective</th>

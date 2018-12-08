@@ -18,7 +18,6 @@
     <script src="/script/B/B2_0-Growl.js"></script>
     <script src="/script/default.js"></script>
     <link rel="stylesheet" href="/css/page.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
     <script>
         function init() {
@@ -29,8 +28,8 @@
             menu.addItem("two", "FAVE", "User", function() { say("User Profile"); });
 
             window.recents = new B.ScrollingTable("tblRecents", 200, "prosp,grpnum,slstyp,taxnum,grpnam,zipcod,prdnam,lastts:%", "group", "groups");
-            recents.contextMenu.addMenu("new", B.img("ADD"), "New Prospect...", function() { BQ.loadPage("/pages/prospect.htm"); });
-            recents.contextMenu.addMenu("edit", B.img("EDIT"), "Edit Prospect...", function() { sayError("Edit prospect not coded"); });
+            recents.contextMenu.addMenu("new", B.img("ADD"), "New Prospect...", function() { newProspect(); });
+            recents.contextMenu.addMenu("edit", B.img("EDIT"), "Edit Prospect...", function() { editProspect(); });
             recents.contextMenu.addSpace();
             recents.contextMenu.addMenu("editQ", "Q", "New Quote...", function() { sayError("New quote not coded"); });
 
@@ -38,19 +37,17 @@
                 //top.app.data.prospects[rd.prosp.val] = { pid:rd.prosp.val, grpnum:rd.grpnum.val, grpnam:rd.grpnam.val, quotes:[] };
             }
             recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
-                BQ.loadPage("/pages/prospect.htm?ID=" + rd.prosp.raw);
+                editProspect();
             }
             recents.footer.addButton("new", "New Prospect", function() {
-                BQ.loadPage("/pages/prospect.htm");
+                newProspect();
             });
             recents.footer.addButton("edit", "Edit Prospect", function() {
-                var rd = recents.getDataRow();
-                sayError("Open Prospect not coded yet");
+                editProspect();
             }, true).disable();
             recents.footer.addSpace();
             recents.footer.addButton("newq", "New Quote", function() {
-                var rd = recents.getDataRow();
-                sayError("New Quote not coded yet");
+                newProspect();
             }, true).disable();
             recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
                 "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
@@ -65,11 +62,23 @@
             msg += "<br><b>Name:</b> " + frm.grpnam;
             sayWarn(msg);
         }
+        function editProspect() {
+            var d = recents.getDataRow();
+            top.prosp.pid = d.prosp.raw;
+            top.prosp.grpnam = d.grpnam.raw;
+            location.href = "/pages/prospect.htm";
+        }
+        function newProspect() {
+            top.prosp.pid = -1;
+            top.prosp.grpnam = "";
+            location.href = "/pages/prospect.htm";
+        }
     </script>
 
 </head>
 <body>
 <div id='content'>
+    <div style='width:820px; margin: 0 auto;'>
     <form id='frmSearch' onsubmit='event.preventDefault();'>
         <table class='form'>
             <tr><th>Prospect ID:</th><td><input name='pid' size='10'></td>
@@ -89,6 +98,7 @@
             <th data='lastts,160,LSD'>Last Quote</th>
         </tr>
     </table>
+    </div>
 </div>
 </body>
 </html>
