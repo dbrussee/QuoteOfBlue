@@ -39,6 +39,16 @@ $(document).ready(function () {
 	}
 	if (typeof init === 'function') init();
 });
+B.loadBComponents = function(path, listOfComponents) {
+	var thelist = listOfComponents.split(",");
+	var prefix = B.version.replace(".","_"); // Current version file prefix
+	for (var i = 1; i < thelist.length; i++) {
+		var itm = "B" + prefix + "-" + thelist[i] + ".js";
+		var script = document.createElement('script');
+		script.src = path + itm;
+		document.head.appendChild(script);
+	}
+}
 B.clearSelection = function () {
 	if (document.selection && document.selection.empty) {
 		document.selection.empty();

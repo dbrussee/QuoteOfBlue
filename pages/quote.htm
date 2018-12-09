@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quote of Blue</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="/script/B/B2_0-Core.js"></script>
+    <script src="/script/B/B2_0-Dialog.js"></script>
+    <script src="/script/B/B2_0-Data.js"></script>
+    <script src="/script/B/B2_0-Table.js"></script>
+    <script src="/script/B/B2_0-Menu.js"></script>
+    <script src="/script/B/B2_0-DynamicTabs.js"></script>
+    <script src="/script/B/B2_0-Growl.js"></script>
+    <script src="/script/bq.js"></script>
+    <link rel="stylesheet" href="/css/page.css">
+
+    <script>
+        function init() {
+            BQ.setHeader("Quote Details", "New Quote");
+            window.menu = new BQ.SideMenu();
+            menu.addItem("save", "check", "Save Quote", function() { say("Save Quote not coded"); });
+            menu.addItem("copyq", "file_copy", "Copy Quote", function() { say("Copy Quote not coded"); }).disable();
+            menu.addSpace();
+            menu.addItem("toprosp", "arrow_back", "Back to Prospect", function() { BQ.loadPage("/pages/prospect.htm"); })
+            menu.addItem("home", "home", "Home", function() { BQ.loadPage("/pages/home.htm"); });
+        }
+    </script>
+
+</head>
+<body>
+<div id='content'>
+    <div style='margin: 0 auto;'>
+    <form id='frmSearch' onsubmit='event.preventDefault();'>
+        <table class='form'>
+            <tr><th>Quote ID:</th><td><input name='qid' readonly size='10'></td></tr>
+            <tr><th>Effective Date:</th><td><input name='eff' readonly size='10' value='1/1/2019'></td></tr>
+            <tr><th>Line of Business:</th><td><select name='lob' id='selLOB'>
+                <option value='PPO1'>Blue Value</option>
+            </select></td></tr>
+        </table>
+    </form>
+    </div>
+</div>
+</body>
+</html>

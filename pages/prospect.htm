@@ -16,7 +16,7 @@
     <script src="/script/B/B2_0-Menu.js"></script>
     <script src="/script/B/B2_0-DynamicTabs.js"></script>
     <script src="/script/B/B2_0-Growl.js"></script>
-    <script src="/script/default.js"></script>
+    <script src="/script/bq.js"></script>
     <link rel="stylesheet" href="/css/page.css">
     <link rel="stylesheet" href="/css/two-column-page.css">
 
@@ -25,7 +25,9 @@
         BQ.setHeader("Prospect Data", top.prosp.pid == -1 ? "New Prospect" : "P#" + top.prosp.pid);
 
         window.menu = new BQ.SideMenu();
-        menu.addItem("home", "HOME", "Home", function() { BQ.loadPage("/pages/home.htm"); });
+        menu.addItem("add", "format_quote", "New Quote", function() { addQuote(); });
+        menu.addSpace();
+        menu.addItem("home", "home", "Home", function() { BQ.loadPage("/pages/home.htm"); });
 
         window.tblP = new B.ScrollingTable("tblPrevious", 220, "qid:#,effdat:@,lob,lastts:%", "quote", "quotes");
         tblP.footer.addButton("add", "New", function() { addQuote(); }).disable();
@@ -50,7 +52,7 @@
     }
     function loadQuotes() {
         tblP.clear();
-        var prosp = top.app.data.prospects[page.pid];
+/*        var prosp = top.app.data.prospects[page.pid];
         if (prosp != null) {
             var qlist = prosp.quotes;
             qlist = qlist.sort(function (a,b) {
@@ -66,6 +68,7 @@
                 tblP.pick(0);
             }
         }
+*/
     }
 
     function saveNewProspect() {
@@ -105,8 +108,9 @@
         }
     }
     function addQuote() {
-        var frm = B.getForm("frmProspect");
-        top.gotoQuote(frm.get("pid"), "NEW");
+        //var frm = B.getForm("frmProspect");
+        //top.gotoQuote(frm.get("pid"), "NEW");
+        location.href="/pages/quote.htm";
     }
     function editQuote() {
         var rd = tblP.getDataRow();
