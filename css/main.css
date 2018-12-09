@@ -21,7 +21,9 @@ body * {
     box-sizing: border-box;
 }
 #header { 
+    grid-row: 1;
     -ms-grid-row:1; 
+    grid-column: 1;
     -ms-grid-column:1;
     grid-area: h; 
     background-image: url('bcbsnc-logo.png');
@@ -34,13 +36,17 @@ body * {
 }
 
 #content { 
+    grid-row: 2;
     -ms-grid-row:2; 
+    grid-column: 1;
     -ms-grid-column:1;
     grid-area: c;
     background-image: linear-gradient(to bottom right, bisque, linen);
 }
 #footer { 
+    grid-row: 3;
     -ms-grid-row:3; 
+    grid-column: 1;
     -ms-grid-column:1;
     grid-area: f;
     border-top: 1px solid darkslategray;
