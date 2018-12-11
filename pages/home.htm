@@ -20,73 +20,72 @@
     <link rel="stylesheet" href="/css/page.css">
 
     <script>
-        function init() {
-            BQ.setHeader("Find Prospects");
-            //BQ.setFooter("BlueQuote Application", "v0.1 beta | Local Region");
-            window.menu = new BQ.SideMenu();
-            menu.addItem("add", "add_circle_outline", "New Prospect", function() { newProspect(); });
-            menu.addItem("edit", "edit", "Edit Prospect", function() { editProspect(); }).disable();
-            menu.addSpace();
-            menu.addItem("quote", "format_quote", "Add Quote", function() { addQuote(); }).disable();
-            menu.addSpace();
-            menu.addItem("one", "tune", "Config", function() { say("Tools"); });
-            menu.addItem("two", "person_outline", "User Profile", function() { say("User Profile"); });
-            menu.addItem("feed", "mail_outline", "Feedback", function() { say("Send Feedback"); });
+    function init() {
+        BQ.setBanner("BlueQuote Home Screen", "");
+        window.menu = top.sidemenu.clear();
+        menu.addItem("add", "FAbuilding", "New Prospect", function() { newProspect(); });
+        menu.addItem("edit", "FASpencil-alt:yellow", "Edit Prospect", function() { editProspect(); }).disable();
+        menu.addSpace();
+        menu.addItem("quote", "FAfile:cyan", "New Quote", function() { addQuote(); }).disable();
+        menu.addSpace();
+        menu.addItem("one", "FASsliders-h", "Config", function() { say("Tools"); });
+        menu.addItem("fonts", "FASfont:tomato", "Fonts", function() { location.href = "/pages/material.htm"; })
 
+        BQ.setRegion("Local");
+        BQ.setUser("U764288", "verified");
 
-            window.recents = new B.ScrollingTable("tblRecents", 200, "prosp,grpnum,slstyp,taxnum,grpnam,zipcod,prdnam,lastts:%", "group", "groups");
-            recents.contextMenu.addMenu("new", B.img("ADD"), "New Prospect...", function() { newProspect(); });
-            recents.contextMenu.addMenu("edit", B.img("EDIT"), "Edit Prospect...", function() { editProspect(); });
-            recents.contextMenu.addSpace();
-            recents.contextMenu.addMenu("editQ", "Q", "New Quote...", function() { addQuote(); });
+        window.recents = new B.ScrollingTable("tblRecents", 200, "prosp,grpnum,slstyp,taxnum,grpnam,zipcod,prdnam,lastts:%", "group", "groups");
+        recents.contextMenu.addMenu("new", B.img("ADD"), "New Prospect...", function() { newProspect(); });
+        recents.contextMenu.addMenu("edit", B.img("EDIT"), "Edit Prospect...", function() { editProspect(); });
+        recents.contextMenu.addSpace();
+        recents.contextMenu.addMenu("editQ", "Q", "New Quote...", function() { addQuote(); });
 
-            recents.onBeforeRowRender = function(rn, rd, tr, tds) {
-                //top.app.data.prospects[rd.prosp.val] = { pid:rd.prosp.val, grpnum:rd.grpnum.val, grpnam:rd.grpnam.val, quotes:[] };
-            }
-            recents.onclick = function() {
-                menu.items.edit.enable();
-                menu.items.quote.enable();
-            }
-            recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
-                editProspect();
-            }
-            recents.footer.addButton("new", "New Prospect", function() {
-                newProspect();
-            });
-            recents.footer.addButton("edit", "Edit Prospect", function() {
-                editProspect();
-            }, true).disable();
-            recents.footer.addSpace();
-            recents.footer.addButton("newq", "New Quote", function() {
-                newProspect();
-            }, true).disable();
-            recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
-                "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
-                "286801\t074137\tRnwl\t91-1943799\tWILKES DENTAL CONSORTIUM\t28659\tSUSAN DENNY\t11/15/2018 2:15:35\n" +
-                "453494\t076567\tNew\t00-0000000\tBrussee Test Group\t27615\tSIMEON A ABBEY\t11/15/2018 2:15:35"
-            );
+        recents.onBeforeRowRender = function(rn, rd, tr, tds) {
+
         }
-        function findProspects() {
-            var frm = B.getForm("frmSearch").get();
-            var msg = "Searching has not been coded yet. However, if it was functional, it would be looking for:<br><br>";
-            msg += "<b>Prospect ID:</b> " + frm.pid;
-            msg += "<br><b>Name:</b> " + frm.grpnam;
-            sayWarn(msg);
+        recents.onclick = function() {
+            menu.items.edit.enable();
+            menu.items.quote.enable();
         }
-        function addQuote() {
-            say("Add Quote not coded yet");
+        recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
+            editProspect();
         }
-        function editProspect() {
-            var d = recents.getDataRow();
-            top.prosp.pid = d.prosp.raw;
-            top.prosp.grpnam = d.grpnam.raw;
-            location.href = "/pages/prospect.htm";
-        }
-        function newProspect() {
-            top.prosp.pid = -1;
-            top.prosp.grpnam = "";
-            location.href = "/pages/prospect.htm";
-        }
+        recents.footer.addButton("new", "New Prospect", function() {
+            newProspect();
+        });
+        recents.footer.addButton("edit", "Edit Prospect", function() { editProspect(); }, true).disable();
+        recents.footer.addSpace();
+        recents.footer.addButton("newq", "New Quote", function() { newProspect(); }, true).disable();
+        
+        recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
+            "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
+            "286801\t074137\tRnwl\t91-1943799\tWILKES DENTAL CONSORTIUM\t28659\tSUSAN DENNY\t11/15/2018 2:15:35\n" +
+            "453494\t076567\tNew\t00-0000000\tBrussee Test Group\t27615\tSIMEON A ABBEY\t11/15/2018 2:15:35"
+        );
+    }
+    function findProspects() {
+        var frm = B.getForm("frmSearch").get();
+        var msg = "Searching has not been coded yet. However, if it was functional, it would be looking for:<br><br>";
+        msg += "<b>Search Info:</b> " + frm;
+        sayWarn(msg);
+    }
+    function addQuote() {
+        var d = recents.getDataRow();
+        top.prosp.pid = d.prosp.raw;
+        top.prosp.grpnam = d.grpnam.raw;
+        location.href = "/pages/quote.htm";
+    }
+    function editProspect() {
+        var d = recents.getDataRow();
+        top.prosp.pid = d.prosp.raw;
+        top.prosp.grpnam = d.grpnam.raw;
+        location.href = "/pages/prospect.htm";
+    }
+    function newProspect() {
+        top.prosp.pid = -1;
+        top.prosp.grpnam = "";
+        location.href = "/pages/prospect.htm";
+    }
     </script>
 
 </head>
@@ -95,8 +94,7 @@
     <div style='width:820px; margin: 0 auto;'>
     <form id='frmSearch' onsubmit='event.preventDefault();'>
         <table class='form'>
-            <tr><th>Prospect ID:</th><td><input name='pid' size='10'></td>
-                <th>Name:</th><td><input name='grpnam' size='20'></td>
+            <tr><th>Search:</th><td><input name='searchinfo' size='50'></td>
                 <td><input type='button' onclick='findProspects()' value='Search'></td>
             </tr>
         </table>

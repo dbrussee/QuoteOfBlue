@@ -20,10 +20,19 @@
     <link rel="stylesheet" href="css/main.css">
 
     <script>
+    
     var prosp = { pid:0, grpnam:'' }
     var quote = { qid:0 }
     function init() {
-        BQ.setFooter("Blue Cross NC - BlueQuote (v2.0.1 &beta;)", "Local  &nbsp;|&nbsp;  U764288");
+        window.sidemenu = new BQ.SideMenu("menu");
+        sidemenu.clear();
+        BQ.setBanner("Default Page - No content loaded", "Empty");
+        BQ.setFooter("Blue Cross NC - BlueQuote (v2.0.1 &beta;)");
+        BQ.setRegion("Local");
+        BQ.setUser("Not Logged In");
+    }
+    function showProfile() {
+        openDialog("dlgProfile");
     }
     </script>
 </head>
@@ -32,13 +41,22 @@
         <div style='color:white; margin-left: 180px; font-size:2.5em; margin-top:12px'>BlueQuote</div>
     </div>
 
+    <div id='banner'>
+        <div id='pagetitle'>pagetitle</div>
+        <div id='pagemessage'>pagemessage</div>
+    </div>
     <div id='content'>
         <iframe id='frmContent' src='pages/home.htm'></iframe>
     </div>
+    <div id='menu'>menu</div>
 
     <div id='footer'>
         <div id='footerLeft'>Left</div>
-        <div id='footerRight'>Right</div>
+        <div id='footerRight'><span id='footerRegion'></span>&nbsp;|&nbsp;<span style='cursor:pointer' onclick='showProfile()' id='footerUser'></span></div>
     </div>
+<form class='BDialog' id='dlgProfile' style='width:500px; height:400px;' title='User Profile'>
+
+    <button class='BDialogButton' onclick='popDialog();'>Close</button>
+</form>
 </body>
 </html>

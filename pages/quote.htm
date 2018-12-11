@@ -21,22 +21,32 @@
 
     <script>
         function init() {
-            BQ.setHeader("Quote Details", "New Quote");
-            window.menu = new BQ.SideMenu();
-            menu.addItem("save", "check", "Save Quote", function() { say("Save Quote not coded"); });
-            menu.addItem("copyq", "file_copy", "Copy Quote", function() { say("Copy Quote not coded"); }).disable();
+            window.menu = top.sidemenu.clear();
+            menu.addItem("save", "FAScheck:lightgreen", "Save Quote", function() { say("Save Quote not coded"); });
+            menu.addItem("copyq", "FAcopy", "Copy Quote", function() { say("Copy Quote not coded"); }).disable();
             menu.addSpace();
-            menu.addItem("toprosp", "arrow_back", "Back to Prospect", function() { BQ.loadPage("/pages/prospect.htm"); })
-            menu.addItem("home", "home", "Home", function() { BQ.loadPage("/pages/home.htm"); });
+            menu.addItem("toprosp", "FAbuilding", "Prospect", function() { BQ.loadPage("/pages/prospect.htm"); })
+            menu.addItem("home", "FAShome", "Home", function() { BQ.loadPage("/pages/home.htm"); });
+
+            var frm = B.getForm("frmQuote");
+            if (top.quote.qid == -1) {
+                BQ.setBanner("Quote Details", "P#" + top.prosp.pid + ": " + top.prosp.grpnam + " - New Quote");
+                menu.items.copyq.disable();
+                frm.set("qid", "");
+            } else {
+                BQ.setBanner("Quote Details", "P#" + top.prosp.pid + ": " + top.prosp.grpnam + " - Q#" + top.quote.qid);
+                menu.items.copyq.enable();
+                frm.set("qid", top.quote.qid);
+            }
         }
     </script>
 
 </head>
 <body>
 <div id='content'>
-    <div style='margin: 0 auto;'>
-    <form id='frmSearch' onsubmit='event.preventDefault();'>
-        <table class='form'>
+    <div>
+    <form id='frmQuote' onsubmit='event.preventDefault();'>
+        <table style='width:500px; margin: 0 auto;' class='form'>
             <tr><th>Quote ID:</th><td><input name='qid' readonly size='10'></td></tr>
             <tr><th>Effective Date:</th><td><input name='eff' readonly size='10' value='1/1/2019'></td></tr>
             <tr><th>Line of Business:</th><td><select name='lob' id='selLOB'>

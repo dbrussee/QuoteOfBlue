@@ -1023,8 +1023,8 @@ B.setCSSRule(".BDialog",
 
 B.setCSSRule("table tr th", "font-weight:normal;");
 B.setCSSRule("table tr th.BScrollingTableHeaderCell", "font-weight:normal; border-left:1px solid white; border-right:1px solid white: ");
-B.setCSSRule("table.BTableData tr.picked", "background-color: springgreen;");
-B.setCSSRule("table.BTableData tr td.picked", "background-color: springgreen;");
+B.setCSSRule("table.BTableData tr.picked", "background-color: cyan;");
+B.setCSSRule("table.BTableData tr td.picked", "background-color: cyan;");
 B.setCSSRule("table.BTableData tr.picked td.picked", "background-color: khaki !important;");
 B.setCSSRule(".shaded",
 	"background: aqua !important; " + /* For browsers that do not support gradients */
