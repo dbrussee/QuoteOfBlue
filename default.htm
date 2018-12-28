@@ -26,10 +26,9 @@
     function init() {
         window.sidemenu = new BQ.SideMenu("menu");
         sidemenu.clear();
-        BQ.setBanner("Default Page - No content loaded", "Empty");
-        BQ.setFooter("Blue Cross NC - BlueQuote (v2.0.1 &beta;)");
-        BQ.setRegion("Local");
-        BQ.setUser("Not Logged In");
+        BQ.setFooter("BlueQuote v2.0.1")
+        BQ.setRegion(B.img("SPINNER"));
+        BQ.setUser(B.format.RED("<b>Not Logged In<b>"));
     }
     function showProfile() {
         openDialog("dlgProfile");
@@ -37,26 +36,20 @@
     </script>
 </head>
 <body>
-    <div id='header'>
-        <div style='color:white; margin-left: 180px; font-size:2.5em; margin-top:12px'>BlueQuote</div>
-    </div>
+    <table id='layout'>
+        <tr><td id='header'><div style='margin-left: 180px; font-size:2.5em;'>BlueQuote</div></td></tr>
+        <tr><td id='content'><iframe id='frmContent' src='pages/test.htm'></iframe></td></tr>
+        <tr><td id='footer'>
+            <table style='width: 100%;'>
+                <tr><td id='footerLeft'>Left</td>
+                    <td id='footerRight'>
+                        <span id='footerRegion'>Region</span> |
+                        <span style='cursor:pointer' onclick='showProfile()' id='footerUser'>Username</span>
+                    </td>
+                </tr>
+            </table>
+        </td></tr>
+    </table>
 
-    <div id='banner'>
-        <div id='pagetitle'>pagetitle</div>
-        <div id='pagemessage'>pagemessage</div>
-    </div>
-    <div id='content'>
-        <iframe id='frmContent' src='pages/home.htm'></iframe>
-    </div>
-    <div id='menu'>menu</div>
-
-    <div id='footer'>
-        <div id='footerLeft'>Left</div>
-        <div id='footerRight'><span id='footerRegion'></span>&nbsp;|&nbsp;<span style='cursor:pointer' onclick='showProfile()' id='footerUser'></span></div>
-    </div>
-<form class='BDialog' id='dlgProfile' style='width:500px; height:400px;' title='User Profile'>
-
-    <button class='BDialogButton' onclick='popDialog();'>Close</button>
-</form>
 </body>
 </html>

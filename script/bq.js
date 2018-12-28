@@ -1,5 +1,26 @@
 // Requires B library
 var BQ = { ver: 0.1 };
+BQ.setupDropdown = function(disableList, target) {
+    if (window.location == parent.window.location) return; // Dont load on root
+    if (disableList == undefined) disableList = "";
+    window.menu = new B.DropdownMenu("dropmenu");
+    var mnu = menu.addMenu("hamburger", B.img("MENU"));
+    mnu.addMenu("test", "", "Testing", function() { say("Howdy"); });
+    mnu = menu.addMenu("prosp", "Prospect");
+    mnu.addMenu("add", "", "New Prospect", function() { newProspect(); });
+    mnu.addMenu("edt", "", "Edit Prospect", function() { editProspect(); });
+    if (target == undefined || target == null) target = "dropmenu";
+    menu.render(target);
+    var lst = disableList.split("|");
+    for (var i = 0; i < lst.length; i++) {
+        if (lst[i] == "") continue;
+        var parts = lst[i].split(",");
+        menu.disableItem(parts[0], parts[1]);
+    }
+}
+
+
+
 BQ.SideMenu = function(id) {
     if (id == undefined) id = "menu";
     this.items = {};
@@ -94,13 +115,10 @@ BQ.setBanner = function(title, message) {
     if (message != null) pagemessage.innerHTML = message;
 }
 
-BQ.setFooter = function(left, right) {
+BQ.setFooter = function(left) {
     var doc = document;
     if (window.location != parent.window.location) doc = parent.document;
     doc.getElementById("footerLeft").innerHTML = left;
-    if (right != undefined) {
-        doc.getElementById("footerRight").innerHTML = right;
-    }
 }
 BQ.setRegion = function(txt) {
     if (txt == undefined) return;

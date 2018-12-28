@@ -1071,6 +1071,12 @@ B.setCSSRule("table.form tr.head2 th", "text-align:center;color:white;font-weigh
 B.setCSSRule("table.form tr td input:not([type])", "padding-left:0.13em");
 B.setCSSRule("table.form tr td input[type=text]", "padding-left:0.13em");
 
+B.setCSSRule(".BGenericMenu.main", "box-sizing:border-box; display:block; box-shadow: 5px 5px 5px grey; cursor:pointer; background-color:white;");
+B.setCSSRule(".BGenericMenu", "box-sizing:border-box; display:block; cursor:pointer;");
+B.setCSSRule(".BGenericMenu div", "box-sizing:border-box; position:relative;" +
+	"padding-left:.2em; padding-right:.2em; padding-top:0; padding-bottom:0;");
+B.setCSSRule(".hilite:hover", "background-color: lightcyan !important; border-left: 3px solid blue !important");
+
 
 B.setCSSRule(".BTab",
 	"background-color: gainsboro; " +

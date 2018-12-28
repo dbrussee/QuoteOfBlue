@@ -6,6 +6,9 @@ B.settings.SlideMenu = {
 	SectionFG: "navy", SectionBG: "lightyellow",
 	ItemFG: "white", ItemBG: "navy", ItemHoverFG: "yellow", ItemHoverBG: "navy"
 };
+B.settings.DropdownMenu = {
+	fontSize: "11pt"
+};
 
 B.PopupMenu = function(onbeforeshow) {
     this.items = {};
@@ -25,9 +28,10 @@ B.PopupMenu = function(onbeforeshow) {
 B.PopupMenu.prototype.addMenu = function(id, img, txt, func, disabled) {
     if (disabled == undefined) disabled = false;
     if (func == undefined) func = function() { return true; };
-    var itm = { kind:'menu', id:id, img:img, text:txt, func:func, disabled:disabled, treenode:null };
+	var itm = { kind:'menu', id:id, img:img, text:txt, func:func, disabled:disabled, treenode:null };
     this.items[id] = itm;
-    this.itemlist.push(itm);
+	this.itemlist.push(itm);
+	return itm;
 };
 B.PopupMenu.prototype.addSpace = function() {
     var itm = { kind:'space' };
@@ -46,9 +50,9 @@ B.PopupMenu.prototype.enable = function() {
 		itm.disabled = false;
 		if (itm.treenode) {
 			itm.treenode.enabled = true;
-			$(itm.treenode.textTD).fadeTo(0,1);
 		}
-    }
+	}
+	this.tree.render();
 };
 B.PopupMenu.prototype.disable = function() {
     for (var i = 0; i < arguments.length; i++) {
@@ -56,9 +60,9 @@ B.PopupMenu.prototype.disable = function() {
 		itm.disabled = true;
 		if (itm.treenode) {
 			itm.treenode.enabled = false;
-			$(itm.treenode.textTD).fadeTo(0,.3);	
 		}
     }
+	this.tree.render();
 };
 B.PopupMenu.prototype.getSubmenu = function(code) {
     // code is <submenuid>.<submenuid>
@@ -95,7 +99,7 @@ B.PopupMenu.prototype.make = function() {
             this.tree.addItem("<span style='color:silver;'>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</span>", function() {}, "<span style='color:silver;'>&mdash;</span>");
         } else if (itm.kind == "menu") {
             if (itm.disabled) {
-                itm.treenode = this.tree.addItem("<span style='color:silver;'>" + itm.text + "</span>", null, "&nbsp;");
+                itm.treenode = this.tree.addItem(itm.text, null, "&nbsp;");
             } else {
                 if (itm.img == "") itm.img = B.char.RIGHT_OL;
                 itm.treenode = this.tree.addItem(itm.text, $.proxy(function() { 
@@ -230,11 +234,12 @@ B.PopupSubmenu.prototype.make = function(branch) {
         if (itm.kind == "space") {
             itm.branch.addItem("<span style='background-color:silver;'>&nbsp;</span>", null,"&nbsp;");
         } else if (itm.kind == "menu") {
-            if (itm.disabled) {
-                itm.treenode = itm.branch.addItem("<span style='color:silver;'>" + itm.text + "</span>", null, "&nbsp;");
-            } else {
+            //if (itm.disabled) {
+            //    itm.treenode = itm.branch.addItem(itm.text, null, "&nbsp;");
+            //} else {
                 if (itm.img == "") itm.img = B.char.RIGHT_OL;
                 itm.treenode = itm.branch.addItem(itm.text, $.proxy(function() { 
+					if (this.disabled) return;
                     var rslt = this.func(); 
                     if (rslt == undefined) rslt = true;
                     if (rslt) {
@@ -242,7 +247,7 @@ B.PopupSubmenu.prototype.make = function(branch) {
                         this.menu.hide();     
                     }
                 }, itm), itm.img);
-            }
+            //}
         } else if (itm.kind == "submenu") {
             this.treenode = this.tree.addBranch(itm.text, false);
             itm.menu.make();
@@ -578,6 +583,10 @@ B.DropdownMenu.prototype.getMenu = function(code) {
 };
 B.DropdownMenu.prototype.getItem = function(menucode, itemid) {
     var menu = this.getMenu(menucode);
+    return menu.items[itemid];
+};
+B.DropdownMenu.prototype.getItemNode = function(menucode, itemid) {
+    var menu = this.getMenu(menucode);
     return menu.items[itemid].treenode;
 };
 B.DropdownMenu.prototype.enableItem = function(code, id) {
@@ -607,11 +616,12 @@ B.DropdownMenu.prototype.render = function(div) {
     var tr = document.createElement('tr');
     tbody.appendChild(tr);
     for (var i = 0; i < this.menulist.length; i++) {
-        var mnu = this.menulist[i]; // pointers to menu objects
+		var mnu = this.menulist[i]; // pointers to menu objects
+		mnu.submenu.make();
         var td = document.createElement("td");
         mnu.td = td;
         td.innerHTML = mnu.text;
-        td.style.cssText = "padding-left:.5em; padding-right:.5em; border-right:1px solid navy;";
+        td.style.cssText = "padding-left:.5em; padding-bottom: .3em; padding-right:.5em; border-right:1px solid navy;font-size:" + B.settings.DropdownMenu.fontSize;
         td.className = "BAction";
         td.onclick = $.proxy(function() { // closing the menu
             this.onclick();

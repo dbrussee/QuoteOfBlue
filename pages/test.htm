@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quote of Blue</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="/script/B/B2_0-Core.js"></script>
+    <script src="/script/B/B2_0-Dialog.js"></script>
+    <script src="/script/B/B2_0-Data.js"></script>
+    <script src="/script/B/B2_0-Table.js"></script>
+    <script src="/script/B/B2_0-Menu2.js"></script>
+    <script src="/script/B/B2_0-DynamicTabs.js"></script>
+    <script src="/script/B/B2_0-Growl.js"></script>
+    <script src="/script/bq.js"></script>
+    <link rel="stylesheet" href="/css/page.css">
+
+    <script>
+        function init() {
+            window.pmenu = new B.ContextMenu(200);
+            pmenu.addItem("a", "", "Test Item 1", function() { say("Woot! First context menu item works.")});
+            pmenu.addItem("b", "", "Test menu", function() { say("Howdy");});
+            pmenu.addSpace();
+            pmenu.addItem("c", null, "Another Test menu", function() { say("Howdy again"); });
+            var sm = pmenu.addSubmenu("sa", "First Submenu");
+            sm.addItem("sa_a", "", "SM1 - First", function() { say("Sub 1, Item 1"); });
+            sm.addItem("sa_b", "", "SM1 - Second", function() { say("Sub 1, Item 2"); });
+            var sm2 = sm.addSubmenu("saa", "Second Level Submenu");
+            sm2.addItem("22", "", "SM1a - One and Only menu item here", function() { say("Wow... 2nd level works too!"); });
+            var sm = pmenu.addSubmenu("sb", "Second Submenu");
+            sm.addItem("sb_a", "", "SM2 - First", function() { say("Sub 2, Item 1"); });
+            pmenu.addItem("d", null, "Third Test menu", function() { testGet() });
+
+            window.tree = new B.Tree("tree", 250);
+            tree.setOnlyOneLevel(true);
+            tree.addItem("a", "", "Test Item 1", function() { say("Woot! First context menu item works.")});
+            tree.addItem("b", "", "Test menu", function() { say("Howdy");});
+            tree.addSpace();
+            tree.addItem("c", null, "Another Test menu", function() { say("Howdy again"); });
+            var sm = tree.addSubmenu("sa", "First Submenu");
+            sm.addItem("sa_a", "", "SM1 - First", function() { say("Sub 1, Item 1"); });
+            sm.addItem("sa_b", "", "SM1 - Second", function() { say("Sub 1, Item 2"); });
+            var sm2 = sm.addSubmenu("saa", "Second Level Submenu");
+            sm2.addItem("22", "", "SM1a - One and Only menu item here", function() { say("Wow... 2nd level works too!"); });
+            var sm = tree.addSubmenu("sb", "Second Submenu");
+            sm.addItem("sb_a", "", "SM2 - First", function() { say("Sub 2, Item 1"); });
+            tree.addItem("d", null, "Third Test menu", function() { testGet() });
+            tree.render();
+
+
+            BQ.setRegion("Local");
+            BQ.setUser("Tester", "verified");
+        }
+        function testPop(event) {
+            pmenu.show(event);
+            return false; // disable normal right-click menu popup
+        }
+        function testPop2(id) {
+            var el = document.getElementById(id);
+            pmenu.showAt(el);
+        }
+        function testGet() {
+            var mnu = tree.get("a");
+            mnu.disable(!mnu.disabled);
+            return false;
+        }
+    </script>
+</head>
+<body>
+<div id='content'>
+    <div id='dropmenu'></div>
+    <div style='width:820px; margin: 0 auto;'>
+        <div id='rclickTest' onclick='testPop2("rclickTest");' oncontextmenu='testPop(event);' style='display:inline-block; width:200px;background-color:red;'>Click<br>me</div>
+        <div id='rclickTest2' onclick='testPop2("rclickTest2");' oncontextmenu='testPop(event);' style='display:inline-block; width:200px;background-color:green;'>Click<br>me</div>
+    </div>
+    <div id='tree' style='margin-left: 3em;'></div>
+</div>
+            
+</body>
+</html>

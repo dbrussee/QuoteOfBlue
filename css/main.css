@@ -1,104 +1,55 @@
 body {
-    height: 100%;
-    display: -ms-grid;
-    display: grid;
     height: 100vh;
     width: 100vw;
     padding: 0; margin: 0; border: 0;
-    -ms-grid-columns: 1fr 90px;
-    grid-template-columns: 1fr 90px;
-    -ms-grid-rows: 70px 25px 1fr 25px;
-    grid-template-rows: 70px 25px 1fr 25px;
-    grid-template-areas: 
-        "h h"
-        "b m"
-        "c m"
-        "f f";
     font-size: 12pt;
-    overflow: hidden;
 }
 body * {
     box-sizing: border-box;
 }
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0; margin: 0; border: 0;
+}
+#layout {
+    height: 100%; 
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 0;
+}
 #header { 
-    grid-row: 1;
-    -ms-grid-row:1; 
-    grid-column: 1;
-    -ms-grid-column:1;
-    -ms-grid-column-span: 2;
-    grid-area: h; 
-    background-image: url('bcbsnc-logo.png');
-    background-color:  #040435;
+    background-image: url('bcbsnc-logo.png'), linear-gradient(to bottom right, #040435, rgb(73, 67, 88));;
+    xxbackground-color:  ;
     background-size: 150px, 100%;
     background-position-x: 1em, 0;
     background-position-y: 12px, 0;
     background-repeat: no-repeat, repeat;
+    color: white;
     padding: .2em;
-}
-#banner {
-    grid-row: 2;
-    -ms-grid-row:2; 
-    grid-column: 1;
-    -ms-grid-column:1;
-    grid-area: b;
-    display: flex;
-    justify-content: space-between;
-    background-color: gainsboro;
-    border-bottom: 1px solid darkslategray;
-}
-#pagetitle {
-    padding: 0;
-    padding-top: .3em;
-    padding-left: .5em;
-}
-#pagemessage {
-    text-align: right;
-    padding: 0;
-    padding-top: .3em;
-    padding-right: .5em;
+    height: 70px;
 }
 
 #content { 
-    grid-row: 3;
-    -ms-grid-row: 3; 
-    grid-column: 1;
-    -ms-grid-column:1;
-    grid-area: c;
-    background-image: linear-gradient(to bottom right, bisque, linen);
-    padding: 3px;
-}
-#menu { 
-    grid-row: 2;
-    -ms-grid-row: 2;
-    grid-column: 2;
-    -ms-grid-column: 2;
-    -ms-grid-row-span: 2;
-    grid-area: m;
-    background-image: linear-gradient(#040435, #0000cc);
-    color: white;
-    padding: .2em;
-    text-align: center;
-    font-size: 8pt;
-    width: 100%;
+    vertical-align: top;
 }
 #footer { 
-    grid-row: 4;
-    -ms-grid-row:4; 
-    grid-column: 1;
-    -ms-grid-column:1;
-    -ms-grid-column-span: 2;
-    grid-area: f;
+    height: 25px;
     border-top: 1px solid darkslategray;
     background-color: gainsboro;
     color: darkslategray;
-    font-size: 9pt;
-    padding: .25em .6em 0 .6em;
-    display:flex;
-    justify-content: space-between;
+}
+#footerLeft {
+    padding-left: .5em;
+    font-size: 8pt;
 }
 #footerRight {
+    font-size: 8pt;
     text-align: right;
+    padding-right: .5em;
 }
+
 
 #frmContent {
     padding: 0; margin: 0; border: 0;
@@ -107,47 +58,6 @@ body * {
 }
 
 
-
-div.BQMenuItem {
-    text-align: center; 
-    cursor: pointer; 
-    margin-bottom:.5em; 
-    padding:.2em 0;
-    border-radius: .7em;
-    padding-bottom: .5em;
-}
-div.BQMenuItem i {
-    color: white;
-    font-size: 24pt;
-}
-div.BQMenuItem:hover {
-    background-image: linear-gradient(to bottom right, rgba(255,255,255,.2),  rgba(255, 255, 255, .45),  rgba(255, 255, 255, 0));
-}
-div.BQMenuItem:hover i {
-    color: dodgerblue !important;
-    text-shadow: 3px 3px 3px black;
-}
-div.BQMenuItem:hover span {
-    text-shadow: 2px 2px 2px black;
-}
-
-div.BQMenuItemDisabled {
-    opacity: .25;
-    text-align: center; 
-    cursor: default; 
-    margin-bottom:.5em; 
-    padding:.2em 0;
-    border-radius: .7em;
-    padding-bottom: .5em;
-}
-div.BQMenuItemDisabled i {
-    font-size: 24pt;
-    color: white !important;
-}
-div.BQMenuSpace {
-    border-bottom: 1px dotted silver;
-    margin-bottom:.2em;
-}
 
 @media print {
     div.BQMenuItem, div.BQMenuSpace {

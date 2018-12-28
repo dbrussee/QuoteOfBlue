@@ -1,20 +1,43 @@
-body {
+body, html {
     height: 100vh;
     width: 100vw;
     padding: 0; margin: 0; border: 0;
     font-size: 12pt;
+    position: absolute;
+    box-sizing: border-box;
 }
 body * {
     box-sizing: border-box;
 }
-#content { 
-    padding-top: 1.5em;
-    margin: 0 auto;
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0; margin: 0; border: 0;
 }
-#content.twocolumn {
-    display: flex;
-    -ms-flex-pack: center;
-    justify-content: center;
+#dropmenu {
+    font-size: 12pt;
+    background-color: rgb(227, 227, 236);
+    border-bottom: 2px solid darkgray;
+    margin-bottom: 1em;
+}
+#layout {
+    height: 100%; 
+    width: 100%;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}
+#banner {
+    height: 25px;
+    background-color: cornflowerblue;
+}
+#content { 
+    height: 100%;
+    background-image: linear-gradient(to bottom right, bisque, linen);
+    vertical-align: top;
+}
+#menu {
+    width: 90px;
+    background-color:  #040435;
 }
 
 input:read-only {
@@ -25,12 +48,47 @@ input:-moz-read-only {
     background: none;
     border: none;
 }
-/* Used in 2-column pages */
-.leftColumn {
-    margin-right:.5em;
+
+
+div.BQMenuItem {
+    text-align: center; 
+    cursor: pointer; 
+    margin-bottom:.5em; 
+    padding:.2em 0;
+    border-radius: .7em;
+    padding-bottom: .5em;
 }
-.rightColumn {
-    margin-left:.5em
+div.BQMenuItem i {
+    color: white;
+    font-size: 24pt;
+}
+div.BQMenuItem:hover {
+    background-image: linear-gradient(to bottom right, rgba(255,255,255,.2),  rgba(255, 255, 255, .45),  rgba(255, 255, 255, 0));
+}
+div.BQMenuItem:hover i {
+    color: dodgerblue !important;
+    text-shadow: 3px 3px 3px black;
+}
+div.BQMenuItem:hover span {
+    text-shadow: 2px 2px 2px black;
+}
+
+div.BQMenuItemDisabled {
+    opacity: .25;
+    text-align: center; 
+    cursor: default; 
+    margin-bottom:.5em; 
+    padding:.2em 0;
+    border-radius: .7em;
+    padding-bottom: .5em;
+}
+div.BQMenuItemDisabled i {
+    font-size: 24pt;
+    color: white !important;
+}
+div.BQMenuSpace {
+    border-bottom: 1px dotted silver;
+    margin-bottom:.2em;
 }
 
 @media print {
