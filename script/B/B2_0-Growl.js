@@ -84,10 +84,14 @@ B.growl.popup = function(typ, title, msg, timeout, icon) {
             window.clearTimeout(this.growlTimer);
             var td = document.createElement("td");
             td.style.cssText = "width:1em;cursor:pointer;position;";
-            td.innerHTML = "<span style='font-weight:bold;color:yellow;background-color:black;padding:.2em;border-radius:.8em;'>X</span>"; 
+            td.innerHTML = "<span style='font-weight:bold;font-size:.8em;margin-left:.2em;color:yellow;background-color:brown;padding:.4em;border-radius:.6em;'>X</span>"; 
             td.onclick = $.proxy(function() { this.parentElement.removeChild(this); }, div);
             this.firstChild.rows[0].appendChild(td);
             this.onclick = null;
+            this.style.backgroundColor = "khaki";
+            this.style.backgroundImage = "linear-gradient(to bottom right, papayawhip, silver)";
+            this.style.boxShadow = "5px 5px 5px grey";
+            $(this).fadeTo(0,1);
         };
     }
 };
