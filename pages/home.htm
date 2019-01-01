@@ -14,6 +14,7 @@
     <script src="/script/B/B2_0-Data.js"></script>
     <script src="/script/B/B2_0-Table.js"></script>
     <script src="/script/B/B2_0-Menu.js"></script>
+    <script src="/script/B/B2_0-Menu2.js"></script>
     <script src="/script/B/B2_0-DynamicTabs.js"></script>
     <script src="/script/B/B2_0-Growl.js"></script>
     <script src="/script/bq.js"></script>
@@ -21,28 +22,17 @@
 
     <script>
     function init() {
-        window.menu = new B.DropdownMenu("dropmenu");
-        var mnu = menu.addMenu("hamburger", B.img("MENU"));
-        mnu = menu.addMenu("prosp", "Prospect");
-        mnu.addMenu("add", "", "New Prospect", function() { newProspect(); });
-        mnu.addMenu("edt", "", "Edit Prospect", function() { editProspect(); });
-        mnu = menu.addMenu("quote", "Quote");
-        mnu.addMenu("add", "", "New Quote", function() { addQuote(); });
-        menu.render("dropmenu");
-        menu.disableItem("prosp", "edt");
-        menu.disableItem("quote", "add");
+        window.menuP = new B.DropMenu(300);
+        menuP.addItem("newprosp", B.img("ADD"), "New Prospect", function() { newProspect(); });
+        menuP.addItem("editprosp", B.img("EDIT"), "Edit Prospect", function() { editProspect(); }).disable();
+        menuP.addSpace();
+        menuP.addItem("ptest", "#", "453464: Brussee Test Group", function() { editProspect(453464, "Brussee Test Group"); });
 
-        /*
-        //BQ.setBanner("BlueQuote Home Screen", "");
-        window.menu = new BQ.SideMenu();
-        menu.addItem("add", "FAbuilding", "New Prospect", function() { newProspect(); });
-        menu.addItem("edit", "FASpencil-alt:yellow", "Edit Prospect", function() { editProspect(); }).disable();
-        menu.addSpace();
-        menu.addItem("quote", "FAfile:cyan", "New Quote", function() { addQuote(); }).disable();
-        menu.addSpace();
-        menu.addItem("one", "FASsliders-h", "Config", function() { say("Tools"); });
-        menu.addItem("fonts", "FASfont:tomato", "Fonts", function() { location.href = "/pages/material.htm"; })
-        */
+        window.menuQ = new B.DropMenu(200);
+        menuQ.addItem("newquote", B.img("ADD"), "New Quote", function() { newQuote(); }).disable();
+
+        window.menuU = new B.DropMenu(200);
+        menuU.addItem("edit", B.img("USER"), "Edit Profile", function() { editProfile(); });
 
         BQ.setRegion("Local");
         BQ.setUser("U764288", "verified");
@@ -51,24 +41,22 @@
         recents.contextMenu.addMenu("new", B.img("ADD"), "New Prospect...", function() { newProspect(); });
         recents.contextMenu.addMenu("edit", B.img("EDIT"), "Edit Prospect...", function() { editProspect(); });
         recents.contextMenu.addSpace();
-        recents.contextMenu.addMenu("editQ", "Q", "New Quote...", function() { addQuote(); });
+        recents.contextMenu.addMenu("editQ", "Q", "New Quote...", function() { newQuote(); });
 
         recents.onBeforeRowRender = function(rn, rd, tr, tds) {
 
         }
         recents.onclick = function() {
-            menu.enableItem("prosp", "edt");
-            menu.enableItem("quote", "add");
+            //menu.enableItem("prosp", "edt");
+            //menu.enableItem("quote", "add");
+            menuP.get("editprosp").enable();
+            menuQ.get("newquote").enable();
         }
-        recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) {
-            editProspect();
-        }
-        recents.footer.addButton("new", "New Prospect", function() {
-            newProspect();
-        });
+        recents.ondblclick = function(tbl, row, cell, rowNum, cellNum, rd) { editProspect(); }
+        recents.footer.addButton("new", "New Prospect", function() { newProspect(); });
         recents.footer.addButton("edit", "Edit Prospect", function() { editProspect(); }, true).disable();
         recents.footer.addSpace();
-        recents.footer.addButton("newq", "New Quote", function() { newProspect(); }, true).disable();
+        recents.footer.addButton("newq", "New Quote", function() { addQuote(); }, true).disable();
         
         recents.addRows("116\t\tNew\t21-1111111\tMary's Test Group\t27560\tDEVI D. DIXON\t11/16/2018 13:28:15\n" +
             "19705\t027974\tNew\t56-1720968\tHAVALOCK ANIMAL HOSPITAL\t28532\tTONI G CARR\t11/15/2018 2:15:35\n" +
@@ -76,22 +64,37 @@
             "453494\t076567\tNew\t00-0000000\tBrussee Test Group\t27615\tSIMEON A ABBEY\t11/15/2018 2:15:35"
         );
     }
+    function showDrop(mnu) {
+        var el = document.getElementById(mnu.id);
+        if (mnu.id == "mnuProsp") {
+            menuP.showAt(el);
+        } else if (mnu.id == "mnuQuote") {
+            menuQ.showAt(el);
+        } else if (mnu.id == "mnuProfile") {
+            menuU.showAt(el);
+        }
+    }
     function findProspects() {
         var frm = B.getForm("frmSearch").get();
         var msg = "Searching has not been coded yet. However, if it was functional, it would be looking for:<br><br>";
         msg += "<b>Search Info:</b> " + frm;
         sayWarn(msg);
     }
-    function addQuote() {
+    function newQuote() {
         var d = recents.getDataRow();
         top.prosp.pid = d.prosp.raw;
         top.prosp.grpnam = d.grpnam.raw;
         location.href = "/pages/quote.htm";
     }
-    function editProspect() {
-        var d = recents.getDataRow();
-        top.prosp.pid = d.prosp.raw;
-        top.prosp.grpnam = d.grpnam.raw;
+    function editProspect(id, nam) {
+        if (id == undefined) {
+            var d = recents.getDataRow();
+            top.prosp.pid = d.prosp.raw;
+            top.prosp.grpnam = d.grpnam.raw;
+        } else {
+            top.prosp.pid = id;
+            top.prosp.grpnam = nam;
+        }
         location.href = "/pages/prospect.htm";
     }
     function newProspect() {
@@ -99,12 +102,21 @@
         top.prosp.grpnam = "";
         location.href = "/pages/prospect.htm";
     }
+    function editProfile() {
+        var msg = "Profile page has not been coded. Sorry";
+        //sayWarn(msg);
+        B.growl.warnmsg("Test", msg);
+    }
     </script>
 
 </head>
 <body>
 <div id='content'>
-    <div id='dropmenu'></div>
+    <div id='dropmenu'>&nbsp;<img class='BIMG-MENU'> 
+        <div id='mnuProfile' class='dropmenu' onclick='showDrop(this);'>User</div>
+        <div id='mnuProsp' class='dropmenu' onclick='showDrop(this);'>Prospects</div>
+        <div id='mnuQuote' class='dropmenu' onclick='showDrop(this);'>Quotes</div>
+    </div>
     <div style='width:820px; margin: 0 auto;'>
         <form id='frmSearch' onsubmit='event.preventDefault();'>
             <table class='form'>

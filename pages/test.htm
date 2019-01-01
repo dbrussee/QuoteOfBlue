@@ -21,9 +21,19 @@
 
     <script>
         function init() {
-            window.pmenu = new B.ContextMenu(200);
+            window.pmenu = new B.DropMenu(200);
             pmenu.addItem("a", "", "Test Item 1", function() { say("Woot! First context menu item works.")});
-            pmenu.addItem("b", "", "Test menu", function() { say("Howdy");});
+            pmenu.addItem("b", B.img("CHECKN"), "Toggle my value", function() { 
+                var itm = pmenu.get("b");
+                if (itm.value == "N") {
+                    itm.setIconText(B.img("CHECKY")); 
+                    itm.value = "Y";
+                } else {
+                    itm.setIconText(B.img("CHECKN")); 
+                    itm.value = "N";
+                }
+                return false;
+            }).value = "N";
             pmenu.addSpace();
             pmenu.addItem("c", null, "Another Test menu", function() { say("Howdy again"); });
             var sm = pmenu.addSubmenu("sa", "First Submenu");
@@ -34,22 +44,6 @@
             var sm = pmenu.addSubmenu("sb", "Second Submenu");
             sm.addItem("sb_a", "", "SM2 - First", function() { say("Sub 2, Item 1"); });
             pmenu.addItem("d", null, "Third Test menu", function() { testGet() });
-
-            window.tree = new B.Tree("tree", 250);
-            tree.setOnlyOneLevel(true);
-            tree.addItem("a", "", "Test Item 1", function() { say("Woot! First context menu item works.")});
-            tree.addItem("b", "", "Test menu", function() { say("Howdy");});
-            tree.addSpace();
-            tree.addItem("c", null, "Another Test menu", function() { say("Howdy again"); });
-            var sm = tree.addSubmenu("sa", "First Submenu");
-            sm.addItem("sa_a", "", "SM1 - First", function() { say("Sub 1, Item 1"); });
-            sm.addItem("sa_b", "", "SM1 - Second", function() { say("Sub 1, Item 2"); });
-            var sm2 = sm.addSubmenu("saa", "Second Level Submenu");
-            sm2.addItem("22", "", "SM1a - One and Only menu item here", function() { say("Wow... 2nd level works too!"); });
-            var sm = tree.addSubmenu("sb", "Second Submenu");
-            sm.addItem("sb_a", "", "SM2 - First", function() { say("Sub 2, Item 1"); });
-            tree.addItem("d", null, "Third Test menu", function() { testGet() });
-            tree.render();
 
 
             BQ.setRegion("Local");
@@ -76,8 +70,10 @@
     <div style='width:820px; margin: 0 auto;'>
         <div id='rclickTest' onclick='testPop2("rclickTest");' oncontextmenu='testPop(event);' style='display:inline-block; width:200px;background-color:red;'>Click<br>me</div>
         <div id='rclickTest2' onclick='testPop2("rclickTest2");' oncontextmenu='testPop(event);' style='display:inline-block; width:200px;background-color:green;'>Click<br>me</div>
+        <div id='tree' style='display:inline-block; width:200px;background-color:pink;'>Tree<br>menu</div>
     </div>
-    <div id='tree' style='margin-left: 3em;'></div>
+    <br>
+    <div id='treex' style='margin-left: 3em;'></div>
 </div>
             
 </body>
